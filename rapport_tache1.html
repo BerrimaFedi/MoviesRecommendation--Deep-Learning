@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projet 10 — Système de Recommandation Multimédia (Deep Learning)</title>
+<style>
+  @page {
+    size: A4;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --bg-light: #f8fafc;
+    --card-border: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-main);
+    line-height: 1.5;
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .header-left h1 {
+    font-size: 16pt;
+    margin: 0 0 4px 0;
+    color: #0f172a;
+    font-weight: 800;
+  }
+  .header-left .sub {
+    font-size: 10.5pt;
+    color: var(--primary);
+    font-weight: 600;
+    margin: 0;
+  }
+  .header-right {
+    text-align: right;
+    font-size: 9pt;
+    color: var(--text-muted);
+  }
+  .header-right strong {
+    color: #0f172a;
+  }
+
+  /* Headings */
+  h2 {
+    font-size: 11.5pt;
+    color: var(--primary-dark);
+    margin: 16px 0 8px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge {
+    background: var(--primary);
+    color: white;
+    font-size: 8pt;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  p { margin: 0 0 8px 0; }
+
+  /* Cards Grid */
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .card {
+    background: var(--bg-light);
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 9pt;
+  }
+  .card h3 {
+    margin: 0 0 4px 0;
+    font-size: 9.5pt;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card-img { border-top: 3px solid #3b82f6; }
+  .card-txt { border-top: 3px solid #10b981; }
+  .card-num { border-top: 3px solid #f59e0b; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 9pt;
+  }
+  th {
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 700;
+    text-align: left;
+    padding: 6px 10px;
+    border: 1px solid var(--card-border);
+  }
+  td {
+    padding: 6px 10px;
+    border: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+
+  /* Diagram Box */
+  .diagram-box {
+    background: #f8fafc;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+    text-align: center;
+  }
+  .diagram-box svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Highlight Box */
+  .tip-box {
+    background: #eff6ff;
+    border-left: 4px solid var(--primary);
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 9pt;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .print-bar {
+    position: sticky;
+    top: 0;
+    background: white;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    justify-content: flex-end;
+    z-index: 10;
+  }
+  .btn-print {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 9pt;
+    cursor: pointer;
+  }
+  .btn-print:hover { background: var(--primary-dark); }
+
+  @media print {
+    .print-bar { display: none !important; }
+    .container { padding: 0; max-width: 100%; }
+    .page-break { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <button class="btn-print" onclick="window.print()">🖨️ Enregistrer en PDF (Imprimer / Ctrl+P)</button>
+</div>
+
+<div class="container">
+
+  <!-- EN-TÊTE DU PROJET -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Projet 10 — Système de Recommandation Multimédia</h1>
+      <p class="sub">Tâche 1 : Données, Algorithmes Deep Learning et Stratégie de Collecte</p>
+    </div>
+    <div class="header-right">
+      <strong>Membres :</strong> Fedi Berrima & Nadia Akhsay<br>
+      <strong>Classe :</strong> Data Science 5 (M2)<br>
+      <strong>Module :</strong> Deep Learning (2026–2027)
+    </div>
+  </div>
+
+  <!-- SECTION 1 : OBJECTIF SIMPLE -->
+  <h2><span class="badge">1</span> C'est quoi l'objectif du projet ?</h2>
+  <p>
+    Le but est de recommander des films à des utilisateurs en combinant <strong>trois types d'informations différentes (multimodalité)</strong> :
+  </p>
+  <div class="grid-3">
+    <div class="card card-img">
+      <h3>🖼️ 1. L'Affiche (Image)</h3>
+      <p>L'aspect visuel, l'ambiance graphique, les couleurs et le style du film.</p>
+    </div>
+    <div class="card card-txt">
+      <h3>📝 2. Le Synopsis (Texte)</h3>
+      <p>Le résumé de l'histoire, les thèmes abordés et les mots-clés du scénario.</p>
+    </div>
+    <div class="card card-num">
+      <h3>📊 3. Les Métadonnées</h3>
+      <p>Genres (action, comédie...), durée, année de sortie, langue et popularité.</p>
+    </div>
+  </div>
+  <p>
+    <strong>Pourquoi le Deep Learning ?</strong> Les systèmes classiques ne regardent que les notes passées. Si un nouveau film sort demain, il n'a aucune note : c'est le problème du <strong>Cold Start (démarrage à froid)</strong>. Grâce au Deep Learning, le réseau regarde directement l'affiche, lit le synopsis et analyse le genre pour comprendre à qui ce film peut plaire, même sans aucune note !
+  </p>
+
+  <!-- SECTION 2 : LES DONNEES -->
+  <h2><span class="badge">2</span> Les Sources de Données</h2>
+  <p>Pour construire ce système, on croise 3 sources complémentaires :</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Source</th>
+        <th style="width: 35%;">Ce qu'on y trouve</th>
+        <th style="width: 45%;">Comment on l'utilise dans le projet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>MovieLens</strong><br>(latest-small)</td>
+        <td>
+          • 100 000 notes de 0,5 à 5 étoiles<br>
+          • 9 700 films et 600 utilisateurs<br>
+          • Fichier <code>links.csv</code> avec les ID TMDB
+        </td>
+        <td>
+          C'est notre <strong>base principale</strong> pour savoir qui a aimé quoi. Mais MovieLens n'a ni affiches ni résumés, donc on doit l'enrichir.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>TMDB</strong><br>(The Movie Database)</td>
+        <td>
+          • Affiches officielles en haute qualité<br>
+          • Synopsis complets des films<br>
+          • Durée, popularité, langue originale
+        </td>
+        <td>
+          On utilise son <strong>API publique</strong> pour télécharger automatiquement l'affiche et le texte pour chaque film de MovieLens.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Kaggle</strong><br>(The Movies Dataset)</td>
+        <td>
+          • Métadonnées et résumés de 45 000 films
+        </td>
+        <td>
+          <strong>Source de secours</strong> : si l'API TMDB ne trouve pas un vieux film, on comble le manque avec Kaggle.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SAUT DE PAGE POUR UNE IMPRESSION PROPRE EN 2 PAGES -->
+  <div class="page-break"></div>
+
+  <!-- SECTION 3 : ARCHITECTURE DEEP LEARNING -->
+  <h2><span class="badge">3</span> L'Architecture Deep Learning (Comment ça marche ?)</h2>
+  <p>
+    Chaque modalité est traitée par un réseau de neurones spécialisé, puis les résultats sont fusionnés pour calculer une note de recommandation de 0,5 à 5 :
+  </p>
+
+  <!-- SCHEMA FLUIDE ET VISUEL -->
+  <div class="diagram-box">
+    <svg viewBox="0 0 750 240" xmlns="http://www.w3.org/2000/svg" style="font-family: inherit;">
+      <!-- Entrées Films -->
+      <rect x="15" y="15" width="180" height="50" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="105" y="36" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">Affiche (Image)</text>
+      <text x="105" y="52" text-anchor="middle" font-size="9" fill="#3b82f6">CNN : ResNet-50 &rarr; 128 valeurs</text>
+
+      <rect x="15" y="80" width="180" height="50" rx="6" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+      <text x="105" y="101" text-anchor="middle" font-size="11" font-weight="700" fill="#065f46">Synopsis (Texte)</text>
+      <text x="105" y="117" text-anchor="middle" font-size="9" fill="#059669">NLP : Sentence-BERT &rarr; 128 valeurs</text>
+
+      <rect x="15" y="145" width="180" height="50" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+      <text x="105" y="166" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">Métadonnées</text>
+      <text x="105" y="182" text-anchor="middle" font-size="9" fill="#d97706">MLP (Dense) : Genres, Durée &rarr; 64 val.</text>
+
+      <!-- FUSION -->
+      <rect x="250" y="55" width="160" height="110" rx="8" fill="#f8fafc" stroke="#1d4ed8" stroke-width="2"/>
+      <text x="330" y="85" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">Couche de FUSION</text>
+      <text x="330" y="105" text-anchor="middle" font-size="9" fill="#475569">Concaténation (320 val.)</text>
+      <text x="330" y="125" text-anchor="middle" font-size="9" fill="#475569">+ Couches Denses (ReLU)</text>
+      <text x="330" y="148" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0284c7">Vecteur du Film</text>
+
+      <!-- UTILISATEUR -->
+      <rect x="460" y="20" width="140" height="50" rx="6" fill="#fdf2f8" stroke="#db2777" stroke-width="1.5"/>
+      <text x="530" y="42" text-anchor="middle" font-size="10.5" font-weight="700" fill="#9d174d">Profil Utilisateur</text>
+      <text x="530" y="58" text-anchor="middle" font-size="9" fill="#be185d">Embedding appris</text>
+
+      <!-- DECISION -->
+      <rect x="460" y="95" width="140" height="65" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+      <text x="530" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b">Comparaison</text>
+      <text x="530" y="136" text-anchor="middle" font-size="9" fill="#64748b">Film &times; Utilisateur</text>
+      <text x="530" y="150" text-anchor="middle" font-size="8.5" fill="#64748b">+ Biais</text>
+
+      <!-- SORTIE -->
+      <circle cx="675" cy="127" r="30" fill="#2563eb"/>
+      <text x="675" y="125" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">Score Final</text>
+      <text x="675" y="139" text-anchor="middle" font-size="8.5" fill="#bfdbfe">de 0.5 à 5 ★</text>
+
+      <!-- FLECHES -->
+      <line x1="195" y1="40" x2="250" y2="85" stroke="#3b82f6" stroke-width="2"/>
+      <line x1="195" y1="105" x2="250" y2="105" stroke="#10b981" stroke-width="2"/>
+      <line x1="195" y1="170" x2="250" y2="135" stroke="#f59e0b" stroke-width="2"/>
+      <line x1="410" y1="125" x2="460" y2="125" stroke="#1d4ed8" stroke-width="2"/>
+      <line x1="530" y1="70" x2="530" y2="95" stroke="#db2777" stroke-width="2"/>
+      <line x1="600" y1="127" x2="645" y2="127" stroke="#1e293b" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <h3>Détail des 3 modèles de Deep Learning :</h3>
+  <ul>
+    <li><strong>Réseau Image (CNN) :</strong> On utilise un modèle pré-entraîné très connu (<strong>ResNet-50</strong>). Il prend l'affiche redimensionnée en $224 \times 224$ pixels et en extrait les motifs visuels importants (couleurs sombres pour un film d'horreur, visages pour une comédie, etc.) pour en faire un vecteur de 128 nombres.</li>
+    <li><strong>Réseau Texte (NLP) :</strong> On utilise <strong>Sentence-BERT</strong> (modèle MiniLM léger et rapide). Contrairement à un simple comptage de mots (TF-IDF), ce transformeur comprend le sens du résumé (ex: il comprend que « vaisseau spatial » et « galaxie » parlent tous deux de science-fiction). Il résume le synopsis en 128 nombres.</li>
+    <li><strong>Réseau Métadonnées (MLP) :</strong> Un petit réseau dense qui prend les genres (en 0 et 1), la durée et la popularité du film pour en faire 64 nombres.</li>
+    <li><strong>La Fusion :</strong> On réunit les 3 sorties ($128 + 128 + 64 = 320$ nombres) et on passe dans des couches denses pour créer la « carte d'identité multimodale » du film.</li>
+  </ul>
+
+  <!-- SECTION 4 : COLD START & EVALUATION -->
+  <h2><span class="badge">4</span> Gestion du Cold Start et Évaluation</h2>
+  
+  <div class="tip-box">
+    <strong>💡 Comment teste-t-on le démarrage à froid (Cold Start) ?</strong><br>
+    On met de côté <strong>5 % des films</strong> qu'on cache complètement au modèle pendant l'entraînement. Pendant le test, le modèle n'a jamais vu de notes pour ces films : il est obligé de prédire si l'utilisateur va aimer uniquement en regardant l'affiche, le synopsis et les genres !
+  </div>
+
+  <p><strong>Découpage des données et métriques :</strong></p>
+  <ul>
+    <li><strong>Découpage chronologique :</strong> 80 % des notes les plus anciennes pour l'entraînement, 10 % intermédiaires pour la validation, et 10 % les plus récentes pour le test (on ne mélange pas au hasard pour respecter le temps réel).</li>
+    <li><strong>Métriques :</strong>
+      <ul>
+        <li><strong>RMSE</strong> (erreur quadratique moyenne) : pour mesurer l'écart entre la vraie note et la note prédite.</li>
+        <li><strong>NDCG@K et Recall@K</strong> : pour vérifier si les films recommandés en haut de liste (Top 5 ou Top 10) sont les bons.</li>
+      </ul>
+    </li>
+    <li><strong>Comparaison (Baselines) :</strong> On comparera notre modèle multimodal à deux méthodes classiques :
+      1) Recommander simplement les films les plus populaires, et 2) La factorisation de matrice classique (SVD).
+    </li>
+  </ul>
+
+</div>
+
+</body>
+</html>

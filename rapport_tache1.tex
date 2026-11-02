@@ -1,0 +1,71 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=18mm}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{37, 99, 235}
+\definecolor{dark}{RGB}{15, 23, 42}
+
+\title{\vspace{-1.2cm}\textbf{\Large Projet 10 : Système de Recommandation Multimédia}\\
+\large Tâche 1 : Données, Algorithmes Deep Learning et Stratégie de Collecte}
+\author{\textbf{Fedi BERRIMA} \and \textbf{Nadia AKHSAY}\\
+\textit{Master Data Science 5 (M2) --- Projet Deep Learning 2026--2027}}
+\date{\vspace{-0.5cm}\today}
+
+\begin{document}
+\maketitle
+
+\section{Objectif du Projet}
+Le but de ce projet est de recommander des films à des utilisateurs en combinant \textbf{trois types de données (multimodalité)} :
+\begin{enumerate}
+    \item \textbf{L'Affiche (Image) :} l'aspect visuel, l'ambiance graphique et le style du film.
+    \item \textbf{Le Synopsis (Texte) :} le résumé de l'histoire et les thèmes du film.
+    \item \textbf{Les Métadonnées :} les genres (action, comédie...), la durée, l'année et la popularité.
+\end{enumerate}
+
+\textbf{Pourquoi le Deep Learning ?} Les systèmes de recommandation classiques (comme la factorisation de matrice) ne regardent que les notes passées. Si un nouveau film sort demain, il n'a aucune note : c'est le problème du \textbf{Cold Start (démarrage à froid)}. Grâce au Deep Learning, le réseau analyse directement l'affiche, lit le synopsis et analyse les genres pour recommander le film, même sans aucune note historique.
+
+\section{Les Sources de Données}
+Nous croisons trois sources de données complémentaires :
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lp{5.5cm}p{7cm}@{}}
+\toprule
+\textbf{Source} & \textbf{Contenu} & \textbf{Utilisation dans le projet} \\ \midrule
+\textbf{MovieLens} & 100 000 notes (0.5 à 5), 9 700 films, fichier \texttt{links.csv} avec identifiants TMDB & Base principale des interactions utilisateurs. Ne contient ni affiche ni synopsis. \\
+\textbf{TMDB (API)} & Affiches en haute qualité (JPEG), synopsis textuels, durée, popularité & Source d'enrichissement principale : interrogée via son API pour chaque film MovieLens. \\
+\textbf{Kaggle} & Métadonnées et synopsis de 45 000 films & Source de secours hors-ligne si l'API TMDB ne renvoie pas un film. \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{Architecture Deep Learning (Les 3 Branches et la Fusion)}
+L'architecture se compose de trois branches spécialisées, fusionnées avant la prédiction :
+
+\begin{itemize}
+    \item \textbf{Branche Image (CNN) :} Nous utilisons un réseau convolutif pré-entraîné (\textbf{ResNet-50}). Il traite l'affiche redimensionnée en $224 \times 224$ pixels pour extraire les caractéristiques visuelles clés sous forme d'un vecteur de 128 valeurs.
+    \item \textbf{Branche Texte (NLP) :} Nous utilisons \textbf{Sentence-BERT} (modèle MiniLM léger). Il comprend le sens global du synopsis et le convertit en un vecteur sémantique de 128 valeurs.
+    \item \textbf{Branche Métadonnées (MLP) :} Un réseau dense qui transforme les genres (encodés en binaire), la durée et la popularité en un vecteur de 64 valeurs.
+    \item \textbf{Couche de Fusion :} Les trois vecteurs sont concaténés ($128 + 128 + 64 = 320$ valeurs) puis traversent des couches denses pour créer la « carte d'identité multimodale » du film.
+    \item \textbf{Prédiction finale :} Ce vecteur de film est combiné avec l'embedding de l'utilisateur pour prédire une note finale entre 0,5 et 5 étoiles.
+\end{itemize}
+
+\section{Gestion du Cold Start et Évaluation}
+\begin{itemize}
+    \item \textbf{Test du Cold Start (démarrage à froid) :} Nous mettons de côté \textbf{5\,\% des films} qui ne sont jamais vus pendant l'entraînement. Pendant le test, le modèle doit prédire la note uniquement à partir de l'affiche, du texte et des métadonnées.
+    \item \textbf{Découpage temporel :} 80\,\% des notes les plus anciennes pour l'entraînement, 10\,\% pour la validation et 10\,\% pour le test.
+    \item \textbf{Métriques d'évaluation :} 
+    \begin{itemize}
+        \item \textbf{RMSE} (Root Mean Squared Error) : pour mesurer l'erreur de prédiction sur les notes.
+        \item \textbf{NDCG@K et Recall@K} : pour évaluer la qualité du classement des films recommandés dans le Top 5 ou Top 10.
+    \end{itemize}
+    \item \textbf{Modèles de comparaison (Baselines) :} Popularité simple et factorisation de matrice classique (SVD).
+\end{itemize}
+
+\end{document}

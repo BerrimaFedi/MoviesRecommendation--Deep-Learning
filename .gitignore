@@ -1,0 +1,19 @@
+# Données lourdes et images (MovieLens, TMDB posters, Kaggle)
+data/
+*.zip
+*.tar.gz
+
+# Environnement virtuel et caches Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Identifiants et secrets sensibles
+.env
+.env.local
+
+# Configuration éditeur
+.vscode/
+.idea/

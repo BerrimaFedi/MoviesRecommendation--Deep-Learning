@@ -1,0 +1,63 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=15mm}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{37, 99, 235}
+\definecolor{dark}{RGB}{15, 23, 42}
+
+\title{\vspace{-1.2cm}\textbf{\Large Projet 10 : Système de Recommandation Multimédia}\\
+\large Bilan Complet : Pipeline DataOps, Architecture Deep Learning \& Résultats (Tâches 1 \& 2)}
+\author{\textbf{Fedi BERRIMA} \and \textbf{Nadia AKHSAY}\\
+\textit{Master Data Science 5 (M2) --- Module Deep Learning 2026--2027}}
+\date{\vspace{-0.5cm}\today}
+
+\begin{document}
+\maketitle
+
+\section{Bilan Chiffré de la Collecte Multimodale}
+\begin{itemize}
+    \item \textbf{Films analysés :} 9 742 films MovieLens croisés avec 9 621 films TMDB et 9 544 films Kaggle.
+    \item \textbf{Taux de couverture multimodale :} \textbf{99.0\,\%} des films possèdent à la fois leur affiche, leur synopsis et leurs métadonnées complètes.
+    \item \textbf{Volume d'images validées :} Plus de 14 000 affiches JPEG au format standard w342 vérifiées via Pillow.
+    \item \textbf{Volume de notes :} 100 836 interactions utilisateurs découpées chronologiquement (77 048 Train, 9 631 Val, 9 631 Test) avec 182 films réservés exclusivement au test de démarrage à froid (\textit{Cold-Start}).
+\end{itemize}
+
+\section{Répertoire des Fichiers Python (collecte/)}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lp{5.5cm}p{7cm}@{}}
+\toprule
+\textbf{Fichier Python} & \textbf{Rôle Opérationnel} & \textbf{Détails \& Sorties} \\ \midrule
+\texttt{movielens.py} & Téléchargement \& validation MovieLens & Archive zip, vérification MD5, extraction \texttt{ratings.csv} et \texttt{links.csv}. \\
+\texttt{tmdb.py} & Client API asynchrone (\texttt{aiohttp}) & 20 req/s, gestion des codes 429, mise en cache \texttt{movies.jsonl}. \\
+\texttt{posters.py} & Téléchargement des affiches & Vérification du format RGB avec Pillow, calcul du hachage SHA-1. \\
+\texttt{kaggle\_meta.py} & Secours hors-ligne (\textit{Fallback}) & Lecture de \texttt{movies\_metadata.csv} (34 Mo), comble les valeurs manquantes. \\
+\texttt{normalize.py} & Harmonisation des métadonnées & Encodage des 20 genres en colonnes multi-hot (\texttt{g\_*}), normalisation langues (ISO). \\
+\texttt{build.py} & Assemblage final \& Découpages & Génère \texttt{movies.csv}, \texttt{ratings.parquet} et le rapport qualité. \\
+\texttt{config.py} \& \texttt{.env} & Configuration \& Clé API & Gestion des chemins et stockage sécurisé de la clé d'API TMDB. \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{Algorithmes de Deep Learning et Justification des Choix}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lp{4cm}p{8cm}@{}}
+\toprule
+\textbf{Modalité} & \textbf{Algorithme Retenu} & \textbf{Pourquoi ce choix ? (Justification technique)} \\ \midrule
+\textbf{Affiche (Image)} & \textbf{ResNet-50 (CNN)} & Poids gelés en phase 1. Extrait l'ambiance visuelle et le style graphique sans surapprentissage. \\
+\textbf{Synopsis (Texte)} & \textbf{Sentence-BERT} (\texttt{MiniLM}) & Bi-encodeur optimisé pour la similarité cosinus. Comprend le sens réel de l'histoire. \\
+\textbf{Métadonnées} & \textbf{Réseau Dense (MLP)} & Compresse les 20 genres multi-hot, la durée et la popularité en un vecteur de 64 dimensions. \\
+\textbf{Couche de Fusion} & \textbf{Dense + ReLU} (Concat 320d $\to$ 128d) & Combine les 3 modalités pour former l'empreinte vectorielle unique du film. \\
+\textbf{Scoring / Cold Start} & \textbf{Embedding Utilisateur + Biais} & Permet de prédire une note même pour un film sans aucune note historique. \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}

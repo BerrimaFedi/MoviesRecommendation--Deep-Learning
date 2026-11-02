@@ -1,0 +1,10 @@
+aiohttp>=3.9
+certifi
+pandas>=2.2
+pyarrow>=15
+pillow>=10
+numpy>=1.26
+# facultatif : téléchargement automatique du dataset Kaggle
+# kaggle>=1.6
+# développement
+pytest>=8

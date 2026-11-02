@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1236.0618749999999 1257.6" width="1236.0618749999999" height="1257.6" style="--bg:#18181B;--fg:#F4F4F5;--line:#71717A;--muted:#A1A1AA;--surface:#27272A;--border:#3F3F46;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<g class="subgraph" data-id="Sources" data-label="📥 1. LES 3 SOURCES EXTERNES">
+  <rect x="208.37891666666667" y="40" width="698.4639999999999" height="130.7" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="208.37891666666667" y="40" width="698.4639999999999" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="220.37891666666667" y="54" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">📥 1. LES 3 SOURCES EXTERNES</text>
+</g>
+<g class="subgraph" data-id="Collecte" data-label="⚙️ 2. SCRIPTS PYTHON DE COLLECTE &amp; DATAOPS (dossier collecte/)">
+  <rect x="40" y="230.7" width="1107.051" height="368.1" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="40" y="230.7" width="1107.051" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="52" y="244.7" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">⚙️ 2. SCRIPTS PYTHON DE COLLECTE &amp; DATAOPS (dossier collecte/)</text>
+</g>
+<g class="subgraph" data-id="Processed" data-label="📦 3. TABLES FINALES PRODUITES (dossier data/processed/)">
+  <rect x="331.6138750000001" y="658.8" width="864.4479999999998" height="130.7" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="331.6138750000001" y="658.8" width="864.4479999999998" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="343.6138750000001" y="672.8" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">📦 3. TABLES FINALES PRODUITES (dossier data/processed/)</text>
+</g>
+<g class="subgraph" data-id="DL" data-label="🧠 4. LES ALGORITHMES DEEP LEARNING &amp; LEUR RÔLE (Tâche 3)">
+  <rect x="135.65633333333352" y="849.5" width="847.2899999999997" height="368.1" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="135.65633333333352" y="849.5" width="847.2899999999997" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="147.65633333333352" y="863.5" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">🧠 4. LES ALGORITHMES DEEP LEARNING &amp; LEUR RÔLE (Tâche 3)</text>
+</g>
+<polyline class="edge" data-from="S1" data-to="F1" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="574.6539166666666,154.7 574.6539166666666,212.7 409.60949999999997,212.7 409.60949999999997,274.7" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="S2" data-to="F2" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="793.1744166666666,154.7 793.1744166666666,214.7 693.338,214.7 693.338,274.7" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="S2" data-to="F3" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="793.1744166666666,154.7 793.1744166666666,214.7 1000.0374999999999,214.7 1000.0374999999999,274.7" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="S3" data-to="F4" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="339.09041666666667,154.7 339.09041666666667,212.7 164.7835,212.7 164.78349999999998,274.7" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="F6" data-to="P1" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="551.47375,582.8 551.47375,642.8 475.2928750000001,642.8 475.2928750000001,702.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="F6" data-to="P2" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="551.47375,582.8 551.47375,642.8 788.290875,642.8 788.290875,702.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="F3" data-to="P3" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1000.0374999999999,345.4 1000.0374999999999,369.4 1076.835875,369.4 1076.835875,702.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P1" data-to="A1" data-style="dotted" data-arrow-start="false" data-arrow-end="true" points="475.2928750000001,773.5 475.2928750000001,833.5 276.7418333333335,833.5 276.7418333333335,893.5" fill="none" stroke="var(--_line)" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P1" data-to="A2" data-style="dotted" data-arrow-start="false" data-arrow-end="true" points="475.2928750000001,773.5 475.2928750000001,833.5 555.6538333333334,833.5 555.6538333333334,893.5" fill="none" stroke="var(--_line)" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P1" data-to="A3" data-style="dotted" data-arrow-start="false" data-arrow-end="true" points="475.2928750000001,773.5 475.2928750000001,833.5 832.7133333333334,833.5 832.7133333333334,893.5" fill="none" stroke="var(--_line)" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P2" data-to="A5" data-style="dotted" data-arrow-start="false" data-arrow-end="true" points="788.290875,773.5 788.2908749999999,807.4999999999999 965.9463333333333,807.4999999999999 965.9463333333332,1094.9 813.85725,1094.9 813.85725,1130.9" fill="none" stroke="var(--_line)" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="F1" data-to="F5" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="409.60949999999997,345.4 409.60949999999997,369.4 551.4737499999999,369.4 551.4737499999999,393.4" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="F2" data-to="F5" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="693.338,345.4 693.338,369.4 551.4737499999999,369.4 551.4737499999999,393.4" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="F3" data-to="F5" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1000.0374999999999,345.4 1000.0374999999999,369.4 551.4737499999999,369.4 551.4737499999999,393.4" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="F4" data-to="F5" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="164.78349999999998,345.4 164.78349999999998,369.4 551.4737499999999,369.4 551.4737499999999,393.4" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="F5" data-to="F6" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="551.4737499999999,464.1 551.4737499999999,512.0999999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="A1" data-to="A4" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="276.7418333333335,964.2 276.7418333333335,988.2 555.6538333333334,988.2 555.6538333333334,1012.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="A2" data-to="A4" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="555.6538333333334,964.2 555.6538333333334,988.2 555.6538333333334,988.2 555.6538333333334,1012.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="A3" data-to="A4" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="832.7133333333334,964.2 832.7133333333334,988.2 555.6538333333334,988.2 555.6538333333334,1012.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="A4" data-to="A5" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="555.6538333333335,1082.9 555.6538333333335,1094.9 707.7429166666668,1094.9 707.7429166666668,1130.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<g class="node" data-id="S1" data-label="GroupLens / MovieLens
+&lt;b&gt;ml-latest-small&lt;/b&gt;
+100k notes + 9.7k films" data-shape="rectangle">
+  <rect x="481.80191666666667" y="84" width="185.70399999999998" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="574.6539166666666" y="119.35" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="574.6539166666666" dy="-12.350000000000001">GroupLens / MovieLens</tspan><tspan x="574.6539166666666" dy="16.900000000000002"><tspan font-weight="bold">ml-latest-small</tspan></tspan><tspan x="574.6539166666666" dy="16.900000000000002">100k notes + 9.7k films</tspan></text>
+</g>
+<g class="node" data-id="S2" data-label="API The Movie Database
+&lt;b&gt;TMDB (v3/v4)&lt;/b&gt;
+Affiches JPEG + Synopsis" data-shape="rectangle">
+  <rect x="695.5059166666666" y="84" width="195.33699999999996" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="793.1744166666666" y="119.35" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="793.1744166666666" dy="-12.350000000000001">API The Movie Database</tspan><tspan x="793.1744166666666" dy="16.900000000000002"><tspan font-weight="bold">TMDB (v3/v4)</tspan></tspan><tspan x="793.1744166666666" dy="16.900000000000002">Affiches JPEG + Synopsis</tspan></text>
+</g>
+<g class="node" data-id="S3" data-label="Kaggle Dataset
+&lt;b&gt;The Movies Dataset&lt;/b&gt;
+movies_metadata.csv (Secours)" data-shape="rectangle">
+  <rect x="224.37891666666667" y="84" width="229.423" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="339.09041666666667" y="119.35" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="339.09041666666667" dy="-12.350000000000001">Kaggle Dataset</tspan><tspan x="339.09041666666667" dy="16.900000000000002"><tspan font-weight="bold">The Movies Dataset</tspan></tspan><tspan x="339.09041666666667" dy="16.900000000000002">movies_metadata.csv (Secours)</tspan></text>
+</g>
+<g class="node" data-id="F1" data-label="&lt;b&gt;movielens.py&lt;/b&gt;
+Télécharge le zip, vérifie MD5
+Extrait ratings, movies, links" data-shape="rectangle">
+  <rect x="301.567" y="274.7" width="216.08499999999995" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="409.60949999999997" y="310.05" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="409.60949999999997" dy="-12.350000000000001"><tspan font-weight="bold">movielens.py</tspan></tspan><tspan x="409.60949999999997" dy="16.900000000000002">Télécharge le zip, vérifie MD5</tspan><tspan x="409.60949999999997" dy="16.900000000000002">Extrait ratings, movies, links</tspan></text>
+</g>
+<g class="node" data-id="F2" data-label="&lt;b&gt;tmdb.py&lt;/b&gt;
+Appelle l'API TMDB en asynchrone (aiohttp)
+Throttling (20 req/s) &amp; Cache JSONL" data-shape="rectangle">
+  <rect x="545.6519999999999" y="274.7" width="295.37199999999996" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="693.338" y="310.05" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="693.338" dy="-12.350000000000001"><tspan font-weight="bold">tmdb.py</tspan></tspan><tspan x="693.338" dy="16.900000000000002">Appelle l&#39;API TMDB en asynchrone (aiohttp)</tspan><tspan x="693.338" dy="16.900000000000002">Throttling (20 req/s) &amp; Cache JSONL</tspan></text>
+</g>
+<g class="node" data-id="F3" data-label="&lt;b&gt;posters.py&lt;/b&gt;
+Télécharge les affiches w342
+Valide avec Pillow (RGB) &amp; Hash SHA-1" data-shape="rectangle">
+  <rect x="869.0239999999999" y="274.7" width="262.02699999999993" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1000.0374999999999" y="310.05" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1000.0374999999999" dy="-12.350000000000001"><tspan font-weight="bold">posters.py</tspan></tspan><tspan x="1000.0374999999999" dy="16.900000000000002">Télécharge les affiches w342</tspan><tspan x="1000.0374999999999" dy="16.900000000000002">Valide avec Pillow (RGB) &amp; Hash SHA-1</tspan></text>
+</g>
+<g class="node" data-id="F4" data-label="&lt;b&gt;kaggle_meta.py&lt;/b&gt;
+Charge movies_metadata.csv
+Comble les manques de TMDB" data-shape="rectangle">
+  <rect x="56" y="274.7" width="217.56699999999995" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="164.78349999999998" y="310.05" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="164.78349999999998" dy="-12.350000000000001"><tspan font-weight="bold">kaggle_meta.py</tspan></tspan><tspan x="164.78349999999998" dy="16.900000000000002">Charge movies_metadata.csv</tspan><tspan x="164.78349999999998" dy="16.900000000000002">Comble les manques de TMDB</tspan></text>
+</g>
+<g class="node" data-id="F5" data-label="&lt;b&gt;normalize.py&lt;/b&gt;
+Unifie les 20 genres (Multi-Hot)
+Normalise langues (ISO) et dates" data-shape="rectangle">
+  <rect x="437.13274999999993" y="393.4" width="228.68199999999996" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="551.4737499999999" y="428.75" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="551.4737499999999" dy="-12.350000000000001"><tspan font-weight="bold">normalize.py</tspan></tspan><tspan x="551.4737499999999" dy="16.900000000000002">Unifie les 20 genres (Multi-Hot)</tspan><tspan x="551.4737499999999" dy="16.900000000000002">Normalise langues (ISO) et dates</tspan></text>
+</g>
+<g class="node" data-id="F6" data-label="&lt;b&gt;build.py&lt;/b&gt;
+Fusionne tout, calcule les indicateurs
+Crée le split temporel &amp; Cold Start" data-shape="rectangle">
+  <rect x="422.31275" y="512.0999999999999" width="258.32199999999995" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="551.47375" y="547.4499999999999" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="551.47375" dy="-12.350000000000001"><tspan font-weight="bold">build.py</tspan></tspan><tspan x="551.47375" dy="16.900000000000002">Fusionne tout, calcule les indicateurs</tspan><tspan x="551.47375" dy="16.900000000000002">Crée le split temporel &amp; Cold Start</tspan></text>
+</g>
+<g class="node" data-id="P1" data-label="&lt;b&gt;movies.csv / .parquet&lt;/b&gt;
+9 742 films avec affiches, synopsis,
+20 colonnes genres g_*, indicateurs" data-shape="rectangle">
+  <rect x="347.6138750000001" y="702.8" width="255.35799999999995" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="475.2928750000001" y="738.15" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="475.2928750000001" dy="-12.350000000000001"><tspan font-weight="bold">movies.csv / .parquet</tspan></tspan><tspan x="475.2928750000001" dy="16.900000000000002">9 742 films avec affiches, synopsis,</tspan><tspan x="475.2928750000001" dy="16.900000000000002">20 colonnes genres g_*, indicateurs</tspan></text>
+</g>
+<g class="node" data-id="P2" data-label="&lt;b&gt;ratings.parquet&lt;/b&gt;
+100 836 notes découpées :
+Train (80k), Val (10k), Test (10k), Cold-Test (4.5k)" data-shape="rectangle">
+  <rect x="630.9718750000001" y="702.8" width="314.63799999999986" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="788.290875" y="738.15" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="788.290875" dy="-12.350000000000001"><tspan font-weight="bold">ratings.parquet</tspan></tspan><tspan x="788.290875" dy="16.900000000000002">100 836 notes découpées :</tspan><tspan x="788.290875" dy="16.900000000000002">Train (80k), Val (10k), Test (10k), Cold-Test (4.5k)</tspan></text>
+</g>
+<g class="node" data-id="P3" data-label="&lt;b&gt;posters/*.jpg&lt;/b&gt;
+14 000+ vraies images JPEG" data-shape="rectangle">
+  <rect x="973.609875" y="702.8" width="206.45199999999994" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1076.835875" y="729.6999999999999" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1076.835875" dy="-3.9000000000000012"><tspan font-weight="bold">posters/*.jpg</tspan></tspan><tspan x="1076.835875" dy="16.900000000000002">14 000+ vraies images JPEG</tspan></text>
+</g>
+<g class="node" data-id="A1" data-label="&lt;b&gt;ResNet-50 (CNN)&lt;/b&gt;
+&lt;i&gt;Pourquoi ?&lt;/i&gt; Extrait les motifs visuels,
+ambiance et couleurs de l'affiche." data-shape="rectangle">
+  <rect x="151.65633333333352" y="893.5" width="250.17099999999994" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="276.7418333333335" y="928.85" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="276.7418333333335" dy="-12.350000000000001"><tspan font-weight="bold">ResNet-50 (CNN)</tspan></tspan><tspan x="276.7418333333335" dy="16.900000000000002"><tspan font-style="italic">Pourquoi ?</tspan> Extrait les motifs visuels,</tspan><tspan x="276.7418333333335" dy="16.900000000000002">ambiance et couleurs de l&#39;affiche.</tspan></text>
+</g>
+<g class="node" data-id="A2" data-label="&lt;b&gt;Sentence-BERT (NLP)&lt;/b&gt;
+&lt;i&gt;Pourquoi ?&lt;/i&gt; Comprend le sens global
+du synopsis (similarité sémantique)." data-shape="rectangle">
+  <rect x="429.82733333333346" y="893.5" width="251.65299999999996" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="555.6538333333334" y="928.85" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="555.6538333333334" dy="-12.350000000000001"><tspan font-weight="bold">Sentence-BERT (NLP)</tspan></tspan><tspan x="555.6538333333334" dy="16.900000000000002"><tspan font-style="italic">Pourquoi ?</tspan> Comprend le sens global</tspan><tspan x="555.6538333333334" dy="16.900000000000002">du synopsis (similarité sémantique).</tspan></text>
+</g>
+<g class="node" data-id="A3" data-label="&lt;b&gt;Réseau Dense MLP&lt;/b&gt;
+&lt;i&gt;Pourquoi ?&lt;/i&gt; Encode les genres (0/1),
+la durée et la popularité." data-shape="rectangle">
+  <rect x="709.4803333333334" y="893.5" width="246.46599999999995" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="832.7133333333334" y="928.85" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="832.7133333333334" dy="-12.350000000000001"><tspan font-weight="bold">Réseau Dense MLP</tspan></tspan><tspan x="832.7133333333334" dy="16.900000000000002"><tspan font-style="italic">Pourquoi ?</tspan> Encode les genres (0/1),</tspan><tspan x="832.7133333333334" dy="16.900000000000002">la durée et la popularité.</tspan></text>
+</g>
+<g class="node" data-id="A4" data-label="&lt;b&gt;Couche de FUSION&lt;/b&gt;
+&lt;i&gt;Pourquoi ?&lt;/i&gt; Combine les 3 vecteurs (320d)
+en une carte d'identité du film (128d)." data-shape="rectangle">
+  <rect x="413.8958333333334" y="1012.2" width="283.51599999999996" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="555.6538333333334" y="1047.55" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="555.6538333333334" dy="-12.350000000000001"><tspan font-weight="bold">Couche de FUSION</tspan></tspan><tspan x="555.6538333333334" dy="16.900000000000002"><tspan font-style="italic">Pourquoi ?</tspan> Combine les 3 vecteurs (320d)</tspan><tspan x="555.6538333333334" dy="16.900000000000002">en une carte d&#39;identité du film (128d).</tspan></text>
+</g>
+<g class="node" data-id="A5" data-label="&lt;b&gt;Scoring &amp; Cold-Start&lt;/b&gt;
+&lt;i&gt;Pourquoi ?&lt;/i&gt; Recommande un film même sans note
+uniquement grâce à l'image + texte !" data-shape="rectangle">
+  <rect x="601.6285833333334" y="1130.9" width="318.3429999999999" height="70.7" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="760.8000833333333" y="1166.25" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="760.8000833333333" dy="-12.350000000000001"><tspan font-weight="bold">Scoring &amp; Cold-Start</tspan></tspan><tspan x="760.8000833333333" dy="16.900000000000002"><tspan font-style="italic">Pourquoi ?</tspan> Recommande un film même sans note</tspan><tspan x="760.8000833333333" dy="16.900000000000002">uniquement grâce à l&#39;image + texte !</tspan></text>
+</g>
+</svg>

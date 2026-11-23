@@ -1,0 +1,30 @@
+{
+  "stage": "align",
+  "status": "ok",
+  "error": null,
+  "started_at": "2026-11-23T15:40:50+00:00",
+  "duration_s": 0.297,
+  "git_commit": "d01742a",
+  "params_hash": "7970496ad9df",
+  "python": "3.15.1",
+  "ingestion_mode": "remote",
+  "metrics": {
+    "movies": 9744,
+    "join_rate_tmdb_key": 0.9989737274220033,
+    "join_rate_text": 0.9950738916256158,
+    "join_rate_image": 0.9902504105090312,
+    "join_rate_meta": 0.9952791461412152,
+    "modality_masks": {
+      "TIM": 9648,
+      "T-M": 48,
+      "---": 46,
+      "-IM": 1,
+      "--M": 1
+    },
+    "movies_by_source": {
+      "movielens": 9742,
+      "external": 2
+    },
+    "genre_mean_jaccard": 0.7067279288679019
+  }
+}

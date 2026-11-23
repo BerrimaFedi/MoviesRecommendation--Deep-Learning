@@ -1,0 +1,58 @@
+# Bonus — conteneurisation : construit l'image, exécute le pipeline sur l'échantillon DANS le conteneur,
+# puis publie l'image sur le registre GitHub (ghcr.io/<propriétaire>/<dépôt>) pour main et les étiquettes.
+#   docker pull ghcr.io/<propriétaire>/<dépôt>:task3 && docker run --rm ghcr.io/<propriétaire>/<dépôt>:task3
+name: docker
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["task*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Nom de l'image (minuscules, exigé par ghcr.io)
+        id: name
+        run: echo "image=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Construction
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: movies-pipeline:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Pipeline et tests dans le conteneur
+        run: |
+          docker run --rm movies-pipeline:ci
+          docker run --rm movies-pipeline:ci python -m pytest -q
+
+      - name: Connexion à ghcr.io
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publication
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+        run: |
+          IMG=${{ steps.name.outputs.image }}
+          TAG=${GITHUB_REF_NAME//\//-}
+          docker tag movies-pipeline:ci "$IMG:$TAG"
+          docker push "$IMG:$TAG"
+          if [ "$GITHUB_REF" = "refs/heads/main" ]; then docker tag movies-pipeline:ci "$IMG:latest"; docker push "$IMG:latest"; fi

@@ -1,0 +1,66 @@
+# Intégration continue : installation, lint, tests unitaires + tests de données, pipeline DVC complet
+# sur l'échantillon synthétique (aucun secret ni accès réseau aux sources n'est nécessaire).
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-ml.txt
+
+      - name: Installation (dépendances figées, torch CPU)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Lint
+        run: ruff check src tests
+
+      - name: Tests unitaires et tests de données
+        run: pytest -q
+
+      - name: Pipeline DVC sur échantillon
+        run: |
+          python -m src.common.config configs/params.ci.yaml --out configs/params.yaml
+          dvc repro
+          dvc status
+          dvc metrics show
+
+      - name: Échec contrôlé d'un test de qualité (doit échouer)
+        run: |
+          python -m src.validation.demo_fail --params configs/params.yaml && exit 1 || echo "porte de qualité OK : arrêt attendu"
+
+      - name: Inbox externe défectueuse (doit être rejetée)
+        run: |
+          python -m src.ingestion.external --example-bad --set paths.inbox=$RUNNER_TEMP/bad_inbox
+          python -m src.ingestion.external --set paths.inbox=$RUNNER_TEMP/bad_inbox --set paths.reports=$RUNNER_TEMP/r \
+            && exit 1 || echo "inbox défectueuse rejetée : OK"
+
+      - name: Rapport de qualité
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-report-sample
+          path: |
+            reports_sample/
+            logs/pipeline.jsonl
+          if-no-files-found: ignore

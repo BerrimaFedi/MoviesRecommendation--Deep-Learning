@@ -1,0 +1,27 @@
+{
+  "stage": "split",
+  "status": "ok",
+  "error": null,
+  "started_at": "2026-11-23T15:40:52+00:00",
+  "duration_s": 0.378,
+  "git_commit": "d01742a",
+  "params_hash": "7970496ad9df",
+  "python": "3.15.1",
+  "ingestion_mode": "remote",
+  "metrics": {
+    "split_sizes": {
+      "train": 77048,
+      "val": 9631,
+      "test": 9631,
+      "cold_item_test": 4526,
+      "new": 5
+    },
+    "cold_items": 182,
+    "cold_eligible": 3641,
+    "unseen_item_share_val_test": 0.15668154916415744,
+    "new_segment": 5,
+    "train_end": "2016-03-22T08:30:12+00:00",
+    "val_end": "2017-06-21T07:32:38+00:00",
+    "mode": "frozen"
+  }
+}

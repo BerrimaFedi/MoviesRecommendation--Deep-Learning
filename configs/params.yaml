@@ -1,0 +1,139 @@
+# =====================================================================================
+# Projet 10 — Recommandation multimodale de films — configuration unique du pipeline
+# -------------------------------------------------------------------------------------
+# Toutes les valeurs (chemins, seuils, graines, tailles) sont lues ici : aucun script n'en
+# code en dur. dvc.yaml lit ce fichier (vars + params) : modifier une clé ne relance que les
+# étapes qui la déclarent. CI : configs/params.ci.yaml remplace ce fichier (mode synthétique).
+# =====================================================================================
+
+project:
+  name: movies-multimodal
+  seed: 42
+
+# remote    : vraies sources (GroupLens, API TMDB, CDN d'images TMDB, Kaggle)
+# synthetic : petit jeu artificiel au même format (CI, démonstration hors ligne)
+ingestion:
+  mode: remote
+  synthetic:
+    n_movies: 120
+    n_users: 60
+    ratings_per_user: 30
+
+paths:
+  raw_movielens: data/raw/ml-latest-small
+  raw_tmdb: data/raw/tmdb
+  raw_posters: data/raw/posters
+  raw_kaggle: data/raw/kaggle
+  inbox: inbox                      # données déposées par un tiers (voir inbox/README.md)
+  interim: data/interim
+  processed: data/processed
+  features: data/features
+  reports: reports
+  logs: logs
+
+movielens:
+  version: ml-latest-small          # ml-25m / ml-32m pour les résultats finaux
+  base_url: https://files.grouplens.org/datasets/movielens
+
+tmdb:
+  base_url: https://api.themoviedb.org/3
+  image_base: https://image.tmdb.org/t/p/
+  language: en-US                   # une seule langue de synopsis pour toute la base
+  poster_size: w342
+  rate_per_sec: 20.0                # plafond souple TMDB ≈ 40 req/s
+  concurrency: 16
+  max_retries: 6
+  request_timeout_s: 30.0
+  cache_max_age_days: 180           # conditions d'API TMDB : 6 mois de cache maximum
+  limit: null                       # entier pour un essai rapide sur N films
+
+kaggle:
+  enabled: true
+  dataset: rounakbanik/the-movies-dataset
+  file: movies_metadata.csv
+
+preprocessing:
+  text:
+    min_len_chars: 20               # en dessous : synopsis considéré absent (« TBD », titre…)
+    max_len_chars: 5000
+    unicode_form: NFC
+  image:
+    min_side: 16                    # en dessous : image corrompue / pixel de remplissage
+    verify_decode: sample           # all | sample | none : décodage Pillow des fichiers
+    verify_sample: 300
+  meta:
+    top_languages: 15
+    runtime_min: 1
+    runtime_max: 600
+  ratings:
+    min: 0.5
+    max: 5.0
+    step: 0.5
+
+split:
+  mode: frozen                      # frozen : configs/split_spec.json (évaluation stable) | recompute
+  frozen_spec: configs/split_spec.json
+  train_frac: 0.8
+  val_frac: 0.1                     # le reste (0.1) = test
+  cold_item_frac: 0.05
+  cold_item_min_ratings: 5
+
+# Contrôles de qualité. severity: error -> le pipeline s'arrête ; warn -> signalé seulement.
+validation:
+  raw:
+    min_movies: 50
+    min_ratings: 500
+    max_tmdb_parse_error_rate: 0.001
+    max_poster_missing_file_rate: 0.0
+    max_poster_decode_error_rate: 0.0
+  processed:
+    max_missing:                    # taux de valeurs manquantes tolérés par colonne
+      overview: 0.02
+      poster_file: 0.02
+      release_year: 0.01
+      runtime_min: 0.02
+      original_language: 0.0
+    min_all_modalities_rate: 0.95
+    max_duplicate_rate: 0.0         # (user_id, movie_id) et movie_id
+    max_outlier_rate: 0.005         # durée, année, popularité hors bornes
+    year_min: 1874
+    year_max_offset: 2              # année courante + 2
+    poster_expected_width: 342
+    poster_aspect_range: [1.2, 1.8] # hauteur / largeur (affiche ≈ 1.5)
+    text_max_control_char_rate: 0.0
+    max_release_after_first_rating_rate: 0.01   # synchronisation temporelle film ↔ notes
+    min_genre_agreement: 0.5        # Jaccard moyen MovieLens vs TMDB
+
+features:
+  # light      : encodeurs déterministes sans téléchargement (CI, prototype de fusion)
+  # pretrained : ResNet-50 / CLIP + Sentence-BERT figés (Tâche 4, requirements-ml.txt)
+  backend: light
+  text_dim: 384
+  image_thumb: 16                   # vignette 16×16×3 = 768 dimensions
+  batch_size: 64
+  pretrained:
+    image_model: resnet50
+    text_model: sentence-transformers/all-MiniLM-L6-v2
+
+drift:
+  reference: reports/reference_profile.json
+  psi_warn: 0.10
+  psi_alert: 0.25
+  coverage_alert: 0.02              # variation absolue d'un taux de couverture
+  fail_on_alert: false
+
+fusion:
+  d_model: 256
+  meta_hidden: 128
+  dropout: 0.2
+  modality_dropout: 0.3             # p(masquer une modalité de contenu) à l'entraînement
+  id_dropout: 0.5                   # p(masquer l'embedding d'identifiant) : simule le cold start
+  n_heads: 4
+  lambda_contrastive: 0.1
+  lambda_unimodal: 0.3
+  temperature: 0.07
+
+tracking:
+  backend: mlflow
+  tracking_uri: mlruns
+  experiment: movies-multimodal

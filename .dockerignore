@@ -1,0 +1,13 @@
+.git
+.venv
+.dvc/cache
+.dvc/tmp
+data
+data_sample
+reports_sample
+logs
+mlruns
+.env
+**/__pycache__
+inbox/*
+!inbox/README.md

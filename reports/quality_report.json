@@ -1,0 +1,130 @@
+{
+  "generated_at": "2026-11-23T15:59:28+00:00",
+  "mode": "remote",
+  "commit": "d01742a",
+  "movielens": "ml-latest-small",
+  "volumes": {
+    "movies": 9742,
+    "ratings": 100836,
+    "users": 610,
+    "density": 0.017
+  },
+  "coverage": {
+    "has_overview": 0.995073,
+    "has_poster": 0.990248,
+    "has_meta": 0.995278,
+    "all_modalities": 0.990146,
+    "runtime_missing": 0.004927,
+    "year_missing": 0.000513
+  },
+  "summary": {
+    "rating_mean": 3.5016,
+    "overview_words_median": 43.0,
+    "ratings_per_item_median": 3.0,
+    "items_with_at_most_5_ratings": 0.6639,
+    "genre_mean_jaccard": 0.7067
+  },
+  "validation": {
+    "raw": {
+      "suite": "raw",
+      "n_checks": 45,
+      "n_passed": 45,
+      "n_errors": 0,
+      "n_warnings": 0,
+      "by_category": {
+        "schema": {
+          "passed": 33,
+          "failed": 0
+        },
+        "duplicates": {
+          "passed": 3,
+          "failed": 0
+        },
+        "source": {
+          "passed": 4,
+          "failed": 0
+        },
+        "inter_modal": {
+          "passed": 3,
+          "failed": 0
+        },
+        "missing": {
+          "passed": 2,
+          "failed": 0
+        }
+      },
+      "status": "passed"
+    },
+    "external": {
+      "suite": "external",
+      "n_checks": 0,
+      "n_passed": 0,
+      "n_errors": 0,
+      "n_warnings": 0,
+      "by_category": {},
+      "status": "passed"
+    },
+    "processed": {
+      "suite": "processed",
+      "n_checks": 168,
+      "n_passed": 168,
+      "n_errors": 0,
+      "n_warnings": 0,
+      "by_category": {
+        "schema": {
+          "passed": 132,
+          "failed": 0
+        },
+        "duplicates": {
+          "passed": 5,
+          "failed": 0
+        },
+        "outliers": {
+          "passed": 4,
+          "failed": 0
+        },
+        "missing": {
+          "passed": 5,
+          "failed": 0
+        },
+        "inter_modal": {
+          "passed": 11,
+          "failed": 0
+        },
+        "temporal": {
+          "passed": 2,
+          "failed": 0
+        },
+        "leakage": {
+          "passed": 9,
+          "failed": 0
+        }
+      },
+      "status": "passed"
+    }
+  },
+  "drift_status": "ok",
+  "stages": {
+    "ingest_movielens": "ok",
+    "ingest_kaggle": "ok",
+    "ingest_tmdb": "ok",
+    "ingest_posters": "ok",
+    "ingest_external": "ok",
+    "validate_raw": "ok",
+    "preprocess_catalog": "ok",
+    "preprocess_text": "ok",
+    "preprocess_images": "ok",
+    "preprocess_meta": "ok",
+    "preprocess_ratings": "ok",
+    "align": "ok",
+    "split": "ok",
+    "validate_processed": "ok",
+    "extract_features": "ok",
+    "report": "ok"
+  },
+  "notes": [
+    "popularity, vote_average et vote_count sont des instantanés TMDB à la date tmdb_fetched_at : ils reflètent l'attention actuelle, pas celle de la période des notes (fuite temporelle possible). Exclus des représentations méta (src/features/extract.py).",
+    "Le dataset Kaggle est un instantané TMDB de 2017 dont les notes viennent de MovieLens : ce n'est pas une source indépendante.",
+    "This product uses the TMDB API but is not endorsed or certified by TMDB."
+  ]
+}

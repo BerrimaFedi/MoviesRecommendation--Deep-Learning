@@ -1,0 +1,18 @@
+{
+  "stage": "ingest_movielens",
+  "status": "ok",
+  "error": null,
+  "started_at": "2026-11-23T14:54:09+00:00",
+  "duration_s": 0.052,
+  "git_commit": "d01742a",
+  "params_hash": "e945dc70875a",
+  "python": "3.15.1",
+  "ingestion_mode": "remote",
+  "metrics": {
+    "movies": 9742,
+    "links": 9742,
+    "ratings": 100836,
+    "users": 610,
+    "source_md5": "31a303aabbc519bd33d025e44d6c2570"
+  }
+}

@@ -1,0 +1,275 @@
+# =====================================================================================
+# Pipeline DataOps — Projet 10 (recommandation multimodale de films)
+#   dvc repro            reconstruit tout ce qui est périmé (une seule commande)
+#   dvc dag              affiche le graphe des étapes
+#   dvc status           liste les étapes impactées par une modification
+# Chemins et seuils : configs/params.yaml (interpolation ${...}). Chaque étape ne déclare que
+# les paramètres et le code qu'elle utilise : seules les étapes impactées sont ré-exécutées.
+# =====================================================================================
+vars:
+  - configs/params.yaml
+
+stages:
+  # ---------------------------------------------------------------- 1. ingestion (sources)
+  ingest_movielens:
+    cmd: python -m src.ingestion.movielens
+    deps:
+      - src/ingestion/movielens.py
+      - src/ingestion/synthetic.py
+    params:
+      - configs/params.yaml:
+          - movielens
+          - ingestion
+    outs:
+      - ${paths.raw_movielens}:
+          persist: true
+
+  ingest_kaggle:
+    cmd: python -m src.ingestion.kaggle
+    deps:
+      - src/ingestion/kaggle.py
+    params:
+      - configs/params.yaml:
+          - kaggle
+          - ingestion.mode
+    outs:
+      - ${paths.raw_kaggle}:
+          persist: true
+
+  ingest_tmdb:
+    cmd: python -m src.ingestion.tmdb
+    deps:
+      - src/ingestion/tmdb.py
+      - ${paths.raw_movielens}/links.csv
+    params:
+      - configs/params.yaml:
+          - tmdb
+          - ingestion.mode
+    outs:
+      - ${paths.raw_tmdb}:
+          persist: true          # cache reprenable : jamais effacé avant une ré-exécution
+
+  ingest_posters:
+    cmd: python -m src.ingestion.posters
+    deps:
+      - src/ingestion/posters.py
+      - ${paths.raw_tmdb}
+      - ${paths.raw_kaggle}
+    params:
+      - configs/params.yaml:
+          - tmdb.poster_size
+          - preprocessing.image.min_side
+          - ingestion.mode
+    outs:
+      - ${paths.raw_posters}:
+          persist: true
+
+  ingest_external:           # données déposées par un tiers dans l'inbox (porte de qualité incluse)
+    cmd: python -m src.ingestion.external
+    deps:
+      - src/ingestion/external.py
+      - ${paths.inbox}
+      - ${paths.raw_movielens}/movies.csv
+      - ${paths.raw_movielens}/ratings.csv
+    params:
+      - configs/params.yaml:
+          - preprocessing
+          - validation.processed.year_min
+          - validation.processed.year_max_offset
+    outs:
+      - ${paths.interim}/external
+    metrics:
+      - ${paths.reports}/validation/external.json:
+          cache: false
+
+  # ---------------------------------------------------------------- 2. validation des sources
+  validate_raw:
+    cmd: python -m src.validation.raw
+    deps:
+      - src/validation
+      - ${paths.raw_movielens}
+      - ${paths.raw_tmdb}
+      - ${paths.raw_posters}
+      - ${paths.raw_kaggle}
+    params:
+      - configs/params.yaml:
+          - validation.raw
+          - preprocessing.image
+          - preprocessing.ratings
+    metrics:
+      - ${paths.reports}/validation/raw.json:
+          cache: false
+
+  # ---------------------------------------------------------------- 3. prétraitement par modalité
+  preprocess_catalog:
+    cmd: python -m src.preprocessing.catalog
+    deps:
+      - src/preprocessing/catalog.py
+      - src/preprocessing/normalize.py
+      - ${paths.raw_movielens}
+      - ${paths.reports}/validation/raw.json
+    outs:
+      - ${paths.interim}/catalog.parquet
+
+  preprocess_text:
+    cmd: python -m src.preprocessing.text
+    deps:
+      - src/preprocessing/text.py
+      - src/preprocessing/sources.py
+      - ${paths.raw_tmdb}
+      - ${paths.raw_kaggle}
+      - ${paths.interim}/catalog.parquet
+    params:
+      - configs/params.yaml:
+          - preprocessing.text
+          - kaggle.enabled
+    outs:
+      - ${paths.interim}/text.parquet
+
+  preprocess_images:
+    cmd: python -m src.preprocessing.image
+    deps:
+      - src/preprocessing/image.py
+      - src/preprocessing/sources.py
+      - ${paths.raw_posters}
+      - ${paths.raw_tmdb}
+      - ${paths.interim}/catalog.parquet
+    params:
+      - configs/params.yaml:
+          - preprocessing.image
+    outs:
+      - ${paths.interim}/images.parquet
+
+  preprocess_meta:
+    cmd: python -m src.preprocessing.tabular
+    deps:
+      - src/preprocessing/tabular.py
+      - src/preprocessing/sources.py
+      - ${paths.raw_tmdb}
+      - ${paths.raw_kaggle}
+      - ${paths.interim}/catalog.parquet
+    params:
+      - configs/params.yaml:
+          - preprocessing.meta
+    outs:
+      - ${paths.interim}/meta.parquet
+
+  preprocess_ratings:
+    cmd: python -m src.preprocessing.ratings
+    deps:
+      - src/preprocessing/ratings.py
+      - ${paths.raw_movielens}/ratings.csv
+      - ${paths.interim}/catalog.parquet
+      - ${paths.interim}/external
+    params:
+      - configs/params.yaml:
+          - preprocessing.ratings
+    outs:
+      - ${paths.interim}/ratings.parquet
+
+  # ---------------------------------------------------------------- 4. alignement des modalités
+  align:
+    cmd: python -m src.alignment.align
+    deps:
+      - src/alignment
+      - ${paths.interim}/catalog.parquet
+      - ${paths.interim}/text.parquet
+      - ${paths.interim}/images.parquet
+      - ${paths.interim}/meta.parquet
+      - ${paths.interim}/external
+    params:
+      - configs/params.yaml:
+          - preprocessing.meta.top_languages
+          - preprocessing.text.min_len_chars
+    outs:
+      - ${paths.interim}/movies_aligned.parquet
+
+  # ---------------------------------------------------------------- 5. découpage et export
+  split:
+    cmd: python -m src.splitting.split
+    deps:
+      - src/splitting
+      - ${paths.interim}/movies_aligned.parquet
+      - ${paths.interim}/ratings.parquet
+      - ${split.frozen_spec}
+    params:
+      - configs/params.yaml:
+          - split
+          - project.seed
+    outs:
+      - ${paths.processed}
+
+  # ---------------------------------------------------------------- 6. porte de qualité finale
+  validate_processed:
+    cmd: python -m src.validation.processed
+    deps:
+      - src/validation
+      - ${paths.processed}
+    params:
+      - configs/params.yaml:
+          - validation.processed
+          - preprocessing
+          - split
+    metrics:
+      - ${paths.reports}/validation/processed.json:
+          cache: false
+
+  # ---------------------------------------------------------------- 7. préparation de la fusion
+  extract_features:
+    cmd: python -m src.features.extract
+    deps:
+      - src/features
+      - ${paths.processed}
+      - ${paths.raw_posters}
+      - ${paths.interim}/external
+      - ${paths.reports}/validation/processed.json
+    params:
+      - configs/params.yaml:
+          - features
+    outs:
+      - ${paths.features}
+
+  # ---------------------------------------------------------------- 8. observabilité
+  report:
+    cmd: python -m src.reporting.report
+    deps:
+      - src/reporting
+      - ${paths.processed}
+      - ${paths.reports}/validation/raw.json
+      - ${paths.reports}/validation/external.json
+      - ${paths.reports}/validation/processed.json
+      - ${paths.features}/features.json
+    params:
+      - configs/params.yaml:
+          - drift
+    metrics:
+      - ${paths.reports}/profile.json:
+          cache: false
+      - ${paths.reports}/drift.json:
+          cache: false
+    outs:
+      - ${paths.reports}/quality_report.html:
+          cache: false
+      - ${paths.reports}/quality_report.md:
+          cache: false
+      - ${paths.reports}/quality_report.json:
+          cache: false
+      - ${paths.reports}/data_card.md:
+          cache: false
+
+  # ---------------------------------------------------------------- 9. Tâche 4 et suivantes (réservé)
+  # Les étapes ci-dessous seront activées dans les tâches suivantes ; le suivi d'expériences
+  # (MLflow) est déjà câblé : src/training/tracking.py. Prototype de fusion : src/fusion/.
+  #
+  # train:
+  #   cmd: python -m src.training.train --fusion ${train.fusion}
+  #   deps: [src/fusion, src/training, ${paths.features}, ${paths.processed}/ratings.parquet]
+  #   params: [configs/params.yaml: [fusion, train]]
+  #   outs: [models/model.pt]
+  #   metrics: [reports/train_metrics.json: {cache: false}]
+  #
+  # evaluate:
+  #   cmd: python -m src.training.evaluate
+  #   deps: [src/training, models/model.pt, ${paths.features}, ${paths.processed}/ratings.parquet]
+  #   metrics: [reports/eval_metrics.json: {cache: false}]   # RMSE, NDCG@10, Recall@10 par split
+  #   plots: [reports/eval_by_modality.csv]                 # ablations : retrait de chaque modalité

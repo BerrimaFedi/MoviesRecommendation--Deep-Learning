@@ -1,0 +1,44 @@
+# Configuration « échantillon » : CI et démonstration hors ligne.
+# Hérite de params.yaml ; seules les différences sont listées. Chemins séparés (data_sample/) :
+# le générateur synthétique refuse d'ailleurs d'écraser de vraies données.
+#   local : python -m src.pipeline --params configs/params.ci.yaml
+#   CI    : python -m src.common.config configs/params.ci.yaml --out configs/params.yaml && dvc repro
+extends: params.yaml
+
+ingestion:
+  mode: synthetic
+
+paths:
+  raw_movielens: data_sample/raw/movielens
+  raw_tmdb: data_sample/raw/tmdb
+  raw_posters: data_sample/raw/posters
+  raw_kaggle: data_sample/raw/kaggle
+  inbox: tests/fixtures/empty_inbox
+  interim: data_sample/interim
+  processed: data_sample/processed
+  features: data_sample/features
+  reports: reports_sample
+  logs: logs
+
+split:
+  mode: recompute                   # l'échantillon synthétique n'a pas de spécification figée
+
+preprocessing:
+  image:
+    verify_decode: all
+
+validation:
+  raw:
+    min_movies: 50
+    min_ratings: 500
+  processed:
+    max_missing:            # 3 défauts volontaires sur 120 films (≈ 2,5 %)
+      overview: 0.03
+      poster_file: 0.04
+      release_year: 0.01
+      runtime_min: 0.02
+      original_language: 0.0
+    min_all_modalities_rate: 0.95
+
+drift:
+  reference: reports_sample/reference_profile.json

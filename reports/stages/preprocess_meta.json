@@ -1,0 +1,20 @@
+{
+  "stage": "preprocess_meta",
+  "status": "ok",
+  "error": null,
+  "started_at": "2026-11-23T15:38:09+00:00",
+  "duration_s": 5.204,
+  "git_commit": "d01742a",
+  "params_hash": "7970496ad9df",
+  "python": "3.15.1",
+  "ingestion_mode": "remote",
+  "metrics": {
+    "rows": 9733,
+    "tmdb_404": 113,
+    "found_in_tmdb": 9620,
+    "found_in_kaggle": 9543,
+    "unmapped_tmdb_genres": {},
+    "runtime_above_max": 4,
+    "runtime_missing": 40
+  }
+}

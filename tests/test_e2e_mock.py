@@ -14,9 +14,13 @@ import pytest
 from aiohttp import web
 from PIL import Image
 
-from collecte import build, kaggle_meta, posters, tmdb
-from collecte.config import MissingCredentials, Settings
-from collecte.normalize import genre_columns
+from src.common.config import MissingCredentials, Settings, set_path
+from src.common.io import read_json
+from src.ingestion import kaggle as kaggle_meta
+from src.ingestion import posters, tmdb
+from src.pipeline import run
+from src.preprocessing.normalize import genre_columns
+from tests.conftest import params_for
 
 TOKEN = "test-token"
 LONG = "A sufficiently long synopsis written for the mock server, number {}."
@@ -149,9 +153,17 @@ def pipeline(tmp_path_factory):
     mock = Mock()
     srv = start_server(mock)
     port = srv["port"]
-    cfg = Settings(data_dir=tmp_path_factory.mktemp("data"), movielens_version="ml-mock",
-                   tmdb_base_url=f"http://127.0.0.1:{port}/3", tmdb_image_base=f"http://127.0.0.1:{port}/t/p/",
-                   rate_per_sec=300, concurrency=8, max_retries=3, cold_item_frac=0.1)
+    tmp = tmp_path_factory.mktemp("data")
+    cfg = Settings.for_data_dir(tmp, "ml-mock", tmdb_base_url=f"http://127.0.0.1:{port}/3",
+                                tmdb_image_base=f"http://127.0.0.1:{port}/t/p/", rate_per_sec=300, concurrency=8,
+                                max_retries=3)
+    params = params_for(tmp, raw_movielens="ml-mock")
+    # jeu minuscule et volontairement défectueux : seuils de volume et de couverture relâchés
+    for key, value in {"split.cold_item_frac": 0.1, "validation.raw.min_movies": 10, "validation.raw.min_ratings": 100,
+                       "validation.processed.min_all_modalities_rate": 0.5, "validation.processed.max_missing":
+                       {"overview": 0.2, "poster_file": 0.3, "release_year": 0.1, "runtime_min": 0.2,
+                        "original_language": 0.0}}.items():
+        set_path(params, key, value)
     make_movielens(cfg)
     make_kaggle(cfg)
     ns = SimpleNamespace(cfg=cfg, mock=mock, port=port)
@@ -178,10 +190,14 @@ def pipeline(tmp_path_factory):
         ns.image_hits_1 = sum(v for k, v in mock.hits.items() if k.startswith("image/"))
         ns.pstats2 = posters.fetch(cfg)
         ns.image_hits_2 = sum(v for k, v in mock.hits.items() if k.startswith("image/"))
-        ns.report = build.build(cfg)
+        ns.exit_code = run(params, start="ingest_external")
 
-    ns.movies = pd.read_parquet(cfg.processed_dir / "movies.parquet")
-    ns.ratings = pd.read_parquet(cfg.processed_dir / "ratings.parquet")
+    ns.params = params
+    reports = tmp / "reports"
+    ns.stage = lambda name: read_json(reports / "stages" / f"{name}.json")["metrics"]
+    ns.reports = reports
+    ns.movies = pd.read_parquet(tmp / "processed" / "movies.parquet")
+    ns.ratings = pd.read_parquet(tmp / "processed" / "ratings.parquet")
     yield ns
     srv["loop"].call_soon_threadsafe(srv["loop"].stop)
 
@@ -241,8 +257,8 @@ def test_unknown_tmdb_and_missing_id_movies_are_kept_and_flagged(pipeline):
     rnoid = pipeline.movies[pipeline.movies["movie_id"] == 26].iloc[0]
     for r in (r404, rnoid):
         assert r["in_tmdb"] == 0 and r["n_modalities"] == 0
-    assert pipeline.report["counts"]["tmdb_id_missing_in_links"] == 1
-    assert pipeline.report["counts"]["tmdb_404"] == 1
+    assert pipeline.stage("preprocess_catalog")["tmdb_id_missing_in_links"] == 1
+    assert pipeline.stage("preprocess_meta")["tmdb_404"] == 1
 
 
 def test_genres_are_unified_and_compared(pipeline):
@@ -251,8 +267,8 @@ def test_genres_are_unified_and_compared(pipeline):
     assert list(r["genres_unified"]) == ["Action", "Science Fiction"]
     assert r["g_action"] == 1 and r["g_science_fiction"] == 1 and r["g_comedy"] == 0
     assert r["is_imax"] == 1
-    assert pipeline.report["genres"]["unmapped_tmdb"] == {"Reality": 1}
-    assert pipeline.report["genres"]["mean_jaccard"] == pytest.approx(1.0)
+    assert pipeline.stage("preprocess_meta")["unmapped_tmdb_genres"] == {"Reality": 1}
+    assert pipeline.stage("align")["genre_mean_jaccard"] == pytest.approx(1.0)
     assert set(genre_columns()) <= set(m.columns)
 
 
@@ -271,17 +287,19 @@ def test_rating_splits_are_temporal_and_cold_items_isolated(pipeline):
     assert tr.max() <= va.min() and va.max() <= te.min()
     cold = r[r["split"] == "cold_item_test"]
     cold_movies = set(cold["movie_id"])
-    assert len(cold_movies) == pipeline.report["splits"]["cold_items"] >= 1
+    assert len(cold_movies) == pipeline.stage("split")["cold_items"] >= 1
     assert not set(r[r["split"] != "cold_item_test"]["movie_id"]) & cold_movies  # aucune fuite
     assert not cold["item_in_train"].any()
     assert set(r["split"]) == {"train", "val", "test", "cold_item_test"}
 
 
-def test_reports_and_manifest_are_written(pipeline):
-    cfg = pipeline.cfg
-    rep = json.loads((cfg.reports_dir / "quality_report.json").read_text(encoding="utf-8"))
-    assert rep["counts"]["movies"] == 26
-    md = (cfg.reports_dir / "quality_report.md").read_text(encoding="utf-8")
+def test_pipeline_succeeds_and_writes_reports(pipeline):
+    assert pipeline.exit_code == 0
+    rep = read_json(pipeline.reports / "quality_report.json")
+    assert rep["volumes"]["movies"] == 26
+    assert rep["validation"]["processed"]["n_errors"] == 0
+    md = (pipeline.reports / "quality_report.md").read_text(encoding="utf-8")
     assert "not endorsed or certified by TMDB" in md
-    man = json.loads((cfg.processed_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert (pipeline.reports / "quality_report.html").exists() and (pipeline.reports / "data_card.md").exists()
+    man = json.loads((pipeline.reports.parent / "processed" / "manifest.json").read_text(encoding="utf-8"))
     assert man["seed"] == 42 and "movies_columns" in man

@@ -1,0 +1,15 @@
+{
+  "stage": "report",
+  "status": "ok",
+  "error": null,
+  "started_at": "2026-11-23T15:59:28+00:00",
+  "duration_s": 0.427,
+  "git_commit": "d01742a",
+  "params_hash": "7970496ad9df",
+  "python": "3.15.1",
+  "ingestion_mode": "remote",
+  "metrics": {
+    "drift_status": "ok",
+    "html": "reports/quality_report.html"
+  }
+}

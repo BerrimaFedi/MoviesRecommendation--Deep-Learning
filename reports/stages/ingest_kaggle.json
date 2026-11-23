@@ -1,0 +1,15 @@
+{
+  "stage": "ingest_kaggle",
+  "status": "ok",
+  "error": null,
+  "started_at": "2026-11-23T14:54:12+00:00",
+  "duration_s": 4.868,
+  "git_commit": "d01742a",
+  "params_hash": "e945dc70875a",
+  "python": "3.15.1",
+  "ingestion_mode": "remote",
+  "metrics": {
+    "available": true,
+    "rows_clean": 45433
+  }
+}

@@ -1,0 +1,7 @@
+# Partie modélisation (prototype de fusion, puis Tâche 4). En CI : roue CPU
+#   pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+torch==2.15.0
+# Tâche 4 (non requis pour la Tâche 3) : encodeurs pré-entraînés et suivi d'expériences
+# torchvision          -> ResNet-50 (features.backend: pretrained)
+# sentence-transformers -> all-MiniLM-L6-v2
+# mlflow               -> src/training/tracking.py (repli JSON automatique si absent)

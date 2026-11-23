@@ -1,0 +1,131 @@
+{
+  "status": "ok",
+  "volumes": {
+    "movies": {
+      "ref": 9742,
+      "cur": 9742
+    },
+    "ratings": {
+      "ref": 100836,
+      "cur": 100836
+    },
+    "users": {
+      "ref": 610,
+      "cur": 610
+    },
+    "density": {
+      "ref": 0.017,
+      "cur": 0.017
+    }
+  },
+  "rows": [
+    {
+      "variable": "release_year",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "runtime_min",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "overview_n_words",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "log_popularity",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "poster_aspect",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "rating",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "ratings_per_item",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "ratings_per_user",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "lang_cat",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "split",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "overview_source",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "modality_mask",
+      "kind": "psi",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "has_overview",
+      "kind": "coverage_delta",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "has_poster",
+      "kind": "coverage_delta",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "has_meta",
+      "kind": "coverage_delta",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "all_modalities",
+      "kind": "coverage_delta",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "runtime_missing",
+      "kind": "coverage_delta",
+      "value": 0.0,
+      "level": "ok"
+    },
+    {
+      "variable": "year_missing",
+      "kind": "coverage_delta",
+      "value": 0.0,
+      "level": "ok"
+    }
+  ]
+}

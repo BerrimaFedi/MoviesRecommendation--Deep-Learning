@@ -1,0 +1,20 @@
+{
+  "stage": "preprocess_images",
+  "status": "ok",
+  "error": null,
+  "started_at": "2026-11-23T15:58:36+00:00",
+  "duration_s": 5.161,
+  "git_commit": "d01742a",
+  "params_hash": "7970496ad9df",
+  "python": "3.15.1",
+  "ingestion_mode": "remote",
+  "metrics": {
+    "rows": 9733,
+    "has_poster_rate": 0.9910613377170451,
+    "manifest_ok_but_file_missing": 0,
+    "decode_checked": 300,
+    "decode_failed": 0,
+    "manifest_records_total": 9692,
+    "manifest_records_outside_catalog": 0
+  }
+}

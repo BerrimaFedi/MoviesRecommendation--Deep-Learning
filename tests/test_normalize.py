@@ -1,9 +1,16 @@
 import asyncio
 import time
 
-from collecte.normalize import (clean_text, imdb_tt, jaccard, normalize_language, parse_ml_genres,
-                                parse_tmdb_genres, split_title_year)
-from collecte.tmdb import RateLimiter, load_cache
+from src.ingestion.tmdb import RateLimiter, load_cache
+from src.preprocessing.normalize import (
+    clean_text,
+    imdb_tt,
+    jaccard,
+    normalize_language,
+    parse_ml_genres,
+    parse_tmdb_genres,
+    split_title_year,
+)
 
 
 def test_movielens_genres_are_mapped_to_canonical_vocabulary():

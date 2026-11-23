@@ -1,0 +1,12 @@
+{
+  "summary": {
+    "suite": "external",
+    "n_checks": 0,
+    "n_passed": 0,
+    "n_errors": 0,
+    "n_warnings": 0,
+    "by_category": {},
+    "status": "passed"
+  },
+  "checks": []
+}

@@ -1,0 +1,25 @@
+{
+  "stage": "extract_features",
+  "status": "ok",
+  "error": null,
+  "started_at": "2026-11-23T15:58:48+00:00",
+  "duration_s": 35.079,
+  "git_commit": "d01742a",
+  "params_hash": "7970496ad9df",
+  "python": "3.15.1",
+  "ingestion_mode": "remote",
+  "metrics": {
+    "backend": "light",
+    "n_items": 9742,
+    "dims": {
+      "text": 384,
+      "image": 768,
+      "meta": 42
+    },
+    "presence_rate": {
+      "text": 0.9951,
+      "image": 0.9902,
+      "meta": 0.9953
+    }
+  }
+}

@@ -1,0 +1,2027 @@
+{
+  "summary": {
+    "suite": "processed",
+    "n_checks": 168,
+    "n_passed": 168,
+    "n_errors": 0,
+    "n_warnings": 0,
+    "by_category": {
+      "schema": {
+        "passed": 132,
+        "failed": 0
+      },
+      "duplicates": {
+        "passed": 5,
+        "failed": 0
+      },
+      "outliers": {
+        "passed": 4,
+        "failed": 0
+      },
+      "missing": {
+        "passed": 5,
+        "failed": 0
+      },
+      "inter_modal": {
+        "passed": 11,
+        "failed": 0
+      },
+      "temporal": {
+        "passed": 2,
+        "failed": 0
+      },
+      "leakage": {
+        "passed": 9,
+        "failed": 0
+      }
+    },
+    "status": "passed"
+  },
+  "checks": [
+    {
+      "name": "movies: colonnes attendues présentes",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "toutes",
+      "threshold": [
+        "movie_id",
+        "tmdb_id",
+        "imdb_tt",
+        "title",
+        "overview",
+        "overview_source",
+        "poster_file",
+        "poster_w",
+        "poster_h",
+        "release_date",
+        "release_year",
+        "original_language",
+        "lang_cat",
+        "runtime_min",
+        "popularity",
+        "vote_average",
+        "vote_count",
+        "genres_ml",
+        "genres_unified",
+        "genre_agreement",
+        "is_imax",
+        "has_overview",
+        "has_poster",
+        "has_meta",
+        "in_tmdb",
+        "in_kaggle",
+        "n_modalities",
+        "all_modalities",
+        "modality_mask",
+        "source",
+        "g_action",
+        "g_adventure",
+        "g_animation",
+        "g_comedy",
+        "g_crime",
+        "g_documentary",
+        "g_drama",
+        "g_family",
+        "g_fantasy",
+        "g_film_noir",
+        "g_history",
+        "g_horror",
+        "g_music",
+        "g_mystery",
+        "g_romance",
+        "g_science_fiction",
+        "g_tv_movie",
+        "g_thriller",
+        "g_war",
+        "g_western"
+      ],
+      "detail": ""
+    },
+    {
+      "name": "movies.movie_id: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int32",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movies.movie_id: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.movie_id ≥ 1",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.movie_id: unique",
+      "category": "duplicates",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.tmdb_id: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "Int64",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movies.imdb_tt: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movies.title: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movies.title: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.overview: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movies.overview_source: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movies.overview_source ∈ domaine",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9694
+      },
+      "threshold": 0.0,
+      "detail": "valeurs hors domaine : []"
+    },
+    {
+      "name": "movies.poster_file: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movies.poster_w: type float",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "float64",
+      "threshold": "float",
+      "detail": ""
+    },
+    {
+      "name": "movies.poster_w ≥ 16",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.poster_h: type float",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "float64",
+      "threshold": "float",
+      "detail": ""
+    },
+    {
+      "name": "movies.poster_h ≥ 16",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.release_date: type datetime",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "datetime64[us]",
+      "threshold": "datetime",
+      "detail": ""
+    },
+    {
+      "name": "movies.release_year: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "Int64",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movies.original_language: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movies.original_language: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.lang_cat: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movies.lang_cat: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.runtime_min: type float",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "float64",
+      "threshold": "float",
+      "detail": ""
+    },
+    {
+      "name": "movies.runtime_min ≥ 1",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.popularity: type float",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "float64",
+      "threshold": "float",
+      "detail": ""
+    },
+    {
+      "name": "movies.popularity ≥ 0",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.vote_average: type float",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "float64",
+      "threshold": "float",
+      "detail": ""
+    },
+    {
+      "name": "movies.vote_average ≥ 0",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.vote_average ≤ 10",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.vote_count: type float",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "float64",
+      "threshold": "float",
+      "detail": ""
+    },
+    {
+      "name": "movies.vote_count ≥ 0",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.genres_ml: type list",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "object",
+      "threshold": "list",
+      "detail": ""
+    },
+    {
+      "name": "movies.genres_ml: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.genres_unified: type list",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "object",
+      "threshold": "list",
+      "detail": ""
+    },
+    {
+      "name": "movies.genres_unified: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.genre_agreement: type float",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "float64",
+      "threshold": "float",
+      "detail": ""
+    },
+    {
+      "name": "movies.genre_agreement ≥ 0",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.genre_agreement ≤ 1",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.is_imax: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.is_imax: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.has_overview: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.has_overview: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.has_poster: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.has_poster: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.has_meta: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.has_meta: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.in_tmdb: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.in_tmdb: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.in_kaggle: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.in_kaggle: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.n_modalities: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movies.n_modalities: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.n_modalities ≥ 0",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.n_modalities ≤ 3",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.all_modalities: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.all_modalities: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.modality_mask: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movies.modality_mask: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.source: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movies.source: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.source ∈ domaine",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": "valeurs hors domaine : []"
+    },
+    {
+      "name": "movies.g_action: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_action: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_adventure: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_adventure: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_animation: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_animation: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_comedy: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_comedy: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_crime: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_crime: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_documentary: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_documentary: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_drama: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_drama: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_family: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_family: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_fantasy: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_fantasy: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_film_noir: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_film_noir: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_history: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_history: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_horror: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_horror: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_music: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_music: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_mystery: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_mystery: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_romance: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_romance: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_science_fiction: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_science_fiction: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_tv_movie: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_tv_movie: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_thriller: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_thriller: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_war: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_war: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movies.g_western: type flag",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int8",
+      "threshold": "flag",
+      "detail": ""
+    },
+    {
+      "name": "movies.g_western: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings: colonnes attendues présentes",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "toutes",
+      "threshold": [
+        "user_id",
+        "movie_id",
+        "rating",
+        "timestamp",
+        "split",
+        "source",
+        "user_in_train",
+        "item_in_train"
+      ],
+      "detail": ""
+    },
+    {
+      "name": "ratings.user_id: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int32",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "ratings.user_id: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.user_id ≥ 1",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.movie_id: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int32",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "ratings.movie_id: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.movie_id ≥ 1",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.rating: type float",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "float32",
+      "threshold": "float",
+      "detail": ""
+    },
+    {
+      "name": "ratings.rating: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.rating ≥ 0.5",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.rating ≤ 5.0",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.timestamp: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int64",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "ratings.timestamp: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.timestamp ≥ 0",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.split: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "ratings.split: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.split ∈ domaine",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": "valeurs hors domaine : []"
+    },
+    {
+      "name": "ratings.source: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "ratings.source: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.source ∈ domaine",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": "valeurs hors domaine : []"
+    },
+    {
+      "name": "ratings.user_in_train: type bool",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "bool",
+      "threshold": "bool",
+      "detail": ""
+    },
+    {
+      "name": "ratings.user_in_train: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "ratings.item_in_train: type bool",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "bool",
+      "threshold": "bool",
+      "detail": ""
+    },
+    {
+      "name": "ratings.item_in_train: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "texte: encodable en UTF-8 strict",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9694
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "texte: forme Unicode NFC",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9694
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "texte: caractères de contrôle",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9694
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "texte: longueur ≤ 5000 caractères",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9694
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "image: largeur = 342 px (taille TMDB demandée)",
+      "category": "schema",
+      "severity": "warn",
+      "passed": true,
+      "observed": {
+        "rate": 0.001555,
+        "count": 15,
+        "total": 9647
+      },
+      "threshold": 0.01,
+      "detail": "les affiches plus petites seront redimensionnées à l'extraction"
+    },
+    {
+      "name": "image: ratio hauteur/largeur ∈ [1.2, 1.8]",
+      "category": "outliers",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9647
+      },
+      "threshold": 0.005,
+      "detail": ""
+    },
+    {
+      "name": "tabulaire: code langue ISO 639 (2-3 lettres minuscules)",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "tabulaire: colonnes g_* = genres_unified",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "manquants: overview",
+      "category": "missing",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.004927,
+        "count": 48,
+        "total": 9742
+      },
+      "threshold": 0.02,
+      "detail": ""
+    },
+    {
+      "name": "manquants: poster_file",
+      "category": "missing",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.009752,
+        "count": 95,
+        "total": 9742
+      },
+      "threshold": 0.02,
+      "detail": ""
+    },
+    {
+      "name": "manquants: release_year",
+      "category": "missing",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.000513,
+        "count": 5,
+        "total": 9742
+      },
+      "threshold": 0.01,
+      "detail": ""
+    },
+    {
+      "name": "manquants: runtime_min",
+      "category": "missing",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.004927,
+        "count": 48,
+        "total": 9742
+      },
+      "threshold": 0.02,
+      "detail": ""
+    },
+    {
+      "name": "manquants: original_language",
+      "category": "missing",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "doublons: movie_id",
+      "category": "duplicates",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "doublons: (user_id, movie_id)",
+      "category": "duplicates",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "doublons: affiche identique partagée par plusieurs films",
+      "category": "duplicates",
+      "severity": "warn",
+      "passed": true,
+      "observed": 1,
+      "threshold": 10,
+      "detail": ""
+    },
+    {
+      "name": "doublons: même (titre, année) pour plusieurs movie_id",
+      "category": "duplicates",
+      "severity": "warn",
+      "passed": true,
+      "observed": 10,
+      "threshold": 20,
+      "detail": ""
+    },
+    {
+      "name": "aberrants: année ∉ [1874, 2028]",
+      "category": "outliers",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.005,
+      "detail": ""
+    },
+    {
+      "name": "aberrants: durée > 600 min",
+      "category": "outliers",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.000411,
+        "count": 4,
+        "total": 9742
+      },
+      "threshold": 0.005,
+      "detail": ""
+    },
+    {
+      "name": "aberrants: log(popularité) à |z| > 6",
+      "category": "outliers",
+      "severity": "warn",
+      "passed": true,
+      "observed": {
+        "rate": 0.000103,
+        "count": 1,
+        "total": 9742
+      },
+      "threshold": 0.005,
+      "detail": ""
+    },
+    {
+      "name": "cohérence: n_modalities = somme des masques",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "cohérence: modality_mask = masques",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "cohérence: has_overview=1 ⇒ synopsis ≥ longueur minimale",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "cohérence: has_poster=1 ⇒ fichier + empreinte + dimensions",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "cohérence: has_poster=0 ⇒ poster_file absent (absence explicite)",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "cohérence: sans tmdb_id ⇒ in_tmdb=0",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "clés: ratings.movie_id ∈ movies.movie_id",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "clés: tmdb_id partagé par plusieurs movie_id",
+      "category": "inter_modal",
+      "severity": "warn",
+      "passed": true,
+      "observed": {
+        "rate": 0.000103,
+        "count": 1,
+        "total": 9742
+      },
+      "threshold": 0.001,
+      "detail": ""
+    },
+    {
+      "name": "couverture: films avec les trois modalités",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": 0.9901,
+      "threshold": 0.95,
+      "detail": ""
+    },
+    {
+      "name": "couverture: film noté sans aucun contenu (ni texte ni image)",
+      "category": "inter_modal",
+      "severity": "warn",
+      "passed": true,
+      "observed": {
+        "rate": 0.004833,
+        "count": 47,
+        "total": 9724
+      },
+      "threshold": 0.01,
+      "detail": ""
+    },
+    {
+      "name": "cohérence: accord des genres MovieLens / TMDB (Jaccard moyen)",
+      "category": "inter_modal",
+      "severity": "warn",
+      "passed": true,
+      "observed": 0.7067,
+      "threshold": 0.5,
+      "detail": ""
+    },
+    {
+      "name": "synchronisation: année de sortie ≤ année de la première note",
+      "category": "temporal",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.000514,
+        "count": 5,
+        "total": 9724
+      },
+      "threshold": 0.01,
+      "detail": "une note antérieure à la sortie signale un mauvais appariement movie_id ↔ tmdb_id"
+    },
+    {
+      "name": "fraîcheur: instantané TMDB dans la durée de cache autorisée",
+      "category": "temporal",
+      "severity": "warn",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9621
+      },
+      "threshold": 0.0,
+      "detail": "relancer ingest_tmdb : les conditions TMDB limitent le cache à 6 mois"
+    },
+    {
+      "name": "fuite: films froids absents de train/val/test",
+      "category": "leakage",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "threshold": 0,
+      "detail": ""
+    },
+    {
+      "name": "fuite: item_in_train=False pour les films froids",
+      "category": "leakage",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 4526
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "fuite: train < val < test (chronologique)",
+      "category": "leakage",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "train": [
+          828124615,
+          1458635412
+        ],
+        "val": [
+          1458635435,
+          1498030358
+        ],
+        "test": [
+          1498030379,
+          1537799250
+        ]
+      },
+      "threshold": "max(a) ≤ min(b)",
+      "detail": ""
+    },
+    {
+      "name": "fuite: paire (utilisateur, film) dans plusieurs ensembles",
+      "category": "leakage",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "fuite: indicateur item_in_train exact",
+      "category": "leakage",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "fuite: affiche d'un film froid identique à celle d'un film d'entraînement",
+      "category": "leakage",
+      "severity": "warn",
+      "passed": true,
+      "observed": 0,
+      "threshold": 0,
+      "detail": ""
+    },
+    {
+      "name": "découpage: part de train conforme à la configuration",
+      "category": "leakage",
+      "severity": "warn",
+      "passed": true,
+      "observed": 0.8,
+      "threshold": 0.8,
+      "detail": ""
+    },
+    {
+      "name": "découpage figé: affectation conforme à configs/split_spec.json",
+      "category": "leakage",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "découpage figé: segment new limité aux sources non figées",
+      "category": "leakage",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    }
+  ]
+}

@@ -1,0 +1,616 @@
+schema: '2.0'
+stages:
+  ingest_movielens:
+    cmd: python -m src.ingestion.movielens
+    deps:
+    - path: src/ingestion/movielens.py
+      hash: md5
+      md5: dbb7f393bd38072e791d99aaa3fb5138
+      size: 4361
+    - path: src/ingestion/synthetic.py
+      hash: md5
+      md5: ef4b3ca07934fa5f7d982a7a4a3fe144
+      size: 10288
+    params:
+      configs/params.yaml:
+        ingestion:
+          mode: remote
+          synthetic:
+            n_movies: 120
+            n_users: 60
+            ratings_per_user: 30
+        movielens:
+          version: ml-latest-small
+          base_url: https://files.grouplens.org/datasets/movielens
+    outs:
+    - path: data/raw/ml-latest-small
+      hash: md5
+      md5: 9a75940bc710e4989ad160a3f659c069.dir
+      size: 3303169
+      nfiles: 6
+  ingest_kaggle:
+    cmd: python -m src.ingestion.kaggle
+    deps:
+    - path: src/ingestion/kaggle.py
+      hash: md5
+      md5: f0cfe5384698877b45a194fbe6e04ed0
+      size: 4144
+    params:
+      configs/params.yaml:
+        ingestion.mode: remote
+        kaggle:
+          enabled: true
+          dataset: rounakbanik/the-movies-dataset
+          file: movies_metadata.csv
+    outs:
+    - path: data/raw/kaggle
+      hash: md5
+      md5: ccef9497715a683dc21734c12f544627.dir
+      size: 34445126
+      nfiles: 1
+  ingest_tmdb:
+    cmd: python -m src.ingestion.tmdb
+    deps:
+    - path: data/raw/ml-latest-small/links.csv
+      hash: md5
+      md5: 316913f95cdad64c745ca22f3630e230
+      size: 197979
+    - path: src/ingestion/tmdb.py
+      hash: md5
+      md5: 23617b72e0a7f11b5054eb8303c5f695
+      size: 10566
+    params:
+      configs/params.yaml:
+        ingestion.mode: remote
+        tmdb:
+          base_url: https://api.themoviedb.org/3
+          image_base: https://image.tmdb.org/t/p/
+          language: en-US
+          poster_size: w342
+          rate_per_sec: 20.0
+          concurrency: 16
+          max_retries: 6
+          request_timeout_s: 30.0
+          cache_max_age_days: 180
+          limit:
+    outs:
+    - path: data/raw/tmdb
+      hash: md5
+      md5: ec774aefad9e9a6c8eff8d9ce5ad3c87.dir
+      size: 15813087
+      nfiles: 2
+  ingest_posters:
+    cmd: python -m src.ingestion.posters
+    deps:
+    - path: data/raw/kaggle
+      hash: md5
+      md5: ccef9497715a683dc21734c12f544627.dir
+      size: 34445126
+      nfiles: 1
+    - path: data/raw/tmdb
+      hash: md5
+      md5: ec774aefad9e9a6c8eff8d9ce5ad3c87.dir
+      size: 15813087
+      nfiles: 2
+    - path: src/ingestion/posters.py
+      hash: md5
+      md5: 60cc92da32fd06d53b26ca4d224a9934
+      size: 9908
+    params:
+      configs/params.yaml:
+        ingestion.mode: remote
+        preprocessing.image.min_side: 16
+        tmdb.poster_size: w342
+    outs:
+    - path: data/raw/posters
+      hash: md5
+      md5: 4e1dd323b18ca9fe6326595a646561a3.dir
+      size: 500549070
+      nfiles: 9647
+  validate_raw:
+    cmd: python -m src.validation.raw
+    deps:
+    - path: data/raw/kaggle
+      hash: md5
+      md5: ccef9497715a683dc21734c12f544627.dir
+      size: 34445126
+      nfiles: 1
+    - path: data/raw/ml-latest-small
+      hash: md5
+      md5: 9a75940bc710e4989ad160a3f659c069.dir
+      size: 3303169
+      nfiles: 6
+    - path: data/raw/posters
+      hash: md5
+      md5: 4e1dd323b18ca9fe6326595a646561a3.dir
+      size: 500549070
+      nfiles: 9647
+    - path: data/raw/tmdb
+      hash: md5
+      md5: ec774aefad9e9a6c8eff8d9ce5ad3c87.dir
+      size: 15813087
+      nfiles: 2
+    - path: src/validation
+      hash: md5
+      md5: 29719aed27cc58e5533d82efa04e8953.dir
+      size: 34621
+      nfiles: 6
+    params:
+      configs/params.yaml:
+        preprocessing.image:
+          min_side: 16
+          verify_decode: sample
+          verify_sample: 300
+        preprocessing.ratings:
+          min: 0.5
+          max: 5.0
+          step: 0.5
+        validation.raw:
+          min_movies: 50
+          min_ratings: 500
+          max_tmdb_parse_error_rate: 0.001
+          max_poster_missing_file_rate: 0.0
+          max_poster_decode_error_rate: 0.0
+    outs:
+    - path: reports/validation/raw.json
+      hash: md5
+      md5: db5dda1c676091fcd41e86cea588eb9e
+      size: 12957
+  preprocess_catalog:
+    cmd: python -m src.preprocessing.catalog
+    deps:
+    - path: data/raw/ml-latest-small
+      hash: md5
+      md5: 9a75940bc710e4989ad160a3f659c069.dir
+      size: 3303169
+      nfiles: 6
+    - path: reports/validation/raw.json
+      hash: md5
+      md5: db5dda1c676091fcd41e86cea588eb9e
+      size: 12957
+    - path: src/preprocessing/catalog.py
+      hash: md5
+      md5: 6349831defb2bf0a036d7bb5609060a0
+      size: 2288
+    - path: src/preprocessing/normalize.py
+      hash: md5
+      md5: dbc735fb55834750acd6fbfe564f4914
+      size: 5463
+    outs:
+    - path: data/interim/catalog.parquet
+      hash: md5
+      md5: 3bee59a84f19ead12af6817beba2f675
+      size: 593658
+  preprocess_text:
+    cmd: python -m src.preprocessing.text
+    deps:
+    - path: data/interim/catalog.parquet
+      hash: md5
+      md5: 3bee59a84f19ead12af6817beba2f675
+      size: 593658
+    - path: data/raw/kaggle
+      hash: md5
+      md5: ccef9497715a683dc21734c12f544627.dir
+      size: 34445126
+      nfiles: 1
+    - path: data/raw/tmdb
+      hash: md5
+      md5: ec774aefad9e9a6c8eff8d9ce5ad3c87.dir
+      size: 15813087
+      nfiles: 2
+    - path: src/preprocessing/sources.py
+      hash: md5
+      md5: 1dd83985b15b4111cb9f38342425aaf1
+      size: 3393
+    - path: src/preprocessing/text.py
+      hash: md5
+      md5: 4c5825b601adc17de3e6b89a044058c6
+      size: 3713
+    params:
+      configs/params.yaml:
+        kaggle.enabled: true
+        preprocessing.text:
+          min_len_chars: 20
+          max_len_chars: 5000
+          unicode_form: NFC
+    outs:
+    - path: data/interim/text.parquet
+      hash: md5
+      md5: 50e00d6b7e9124984e76f478ec725fc2
+      size: 2378173
+  preprocess_images:
+    cmd: python -m src.preprocessing.image
+    deps:
+    - path: data/interim/catalog.parquet
+      hash: md5
+      md5: 3bee59a84f19ead12af6817beba2f675
+      size: 593658
+    - path: data/raw/posters
+      hash: md5
+      md5: 4e1dd323b18ca9fe6326595a646561a3.dir
+      size: 500549070
+      nfiles: 9647
+    - path: data/raw/tmdb
+      hash: md5
+      md5: ec774aefad9e9a6c8eff8d9ce5ad3c87.dir
+      size: 15813087
+      nfiles: 2
+    - path: src/preprocessing/image.py
+      hash: md5
+      md5: 295eedd9d49aa5f4c101a8074e733abc
+      size: 4184
+    - path: src/preprocessing/sources.py
+      hash: md5
+      md5: 1dd83985b15b4111cb9f38342425aaf1
+      size: 3393
+    params:
+      configs/params.yaml:
+        preprocessing.image:
+          min_side: 16
+          verify_decode: sample
+          verify_sample: 300
+    outs:
+    - path: data/interim/images.parquet
+      hash: md5
+      md5: ca0f4a370b9b60940c83570fec6c81c5
+      size: 858473
+  preprocess_meta:
+    cmd: python -m src.preprocessing.tabular
+    deps:
+    - path: data/interim/catalog.parquet
+      hash: md5
+      md5: 3bee59a84f19ead12af6817beba2f675
+      size: 593658
+    - path: data/raw/kaggle
+      hash: md5
+      md5: ccef9497715a683dc21734c12f544627.dir
+      size: 34445126
+      nfiles: 1
+    - path: data/raw/tmdb
+      hash: md5
+      md5: ec774aefad9e9a6c8eff8d9ce5ad3c87.dir
+      size: 15813087
+      nfiles: 2
+    - path: src/preprocessing/sources.py
+      hash: md5
+      md5: 1dd83985b15b4111cb9f38342425aaf1
+      size: 3393
+    - path: src/preprocessing/tabular.py
+      hash: md5
+      md5: 3cc2dd2de91db363d04339ee4b7f3c42
+      size: 3638
+    params:
+      configs/params.yaml:
+        preprocessing.meta:
+          top_languages: 15
+          runtime_min: 1
+          runtime_max: 600
+    outs:
+    - path: data/interim/meta.parquet
+      hash: md5
+      md5: 948d9945c5b2c0a931897215d3fbeb8a
+      size: 433575
+  preprocess_ratings:
+    cmd: python -m src.preprocessing.ratings
+    deps:
+    - path: data/interim/catalog.parquet
+      hash: md5
+      md5: 3bee59a84f19ead12af6817beba2f675
+      size: 593658
+    - path: data/interim/external
+      hash: md5
+      md5: 7b15139e1f1e65ea46b30239e6d282f6.dir
+      size: 7547
+      nfiles: 2
+    - path: data/raw/ml-latest-small/ratings.csv
+      hash: md5
+      md5: 325a6f09399d1c45671f187505e1a100
+      size: 2483723
+    - path: src/preprocessing/ratings.py
+      hash: md5
+      md5: a7d490afb69fcd824de0a6dfd9b4e595
+      size: 3114
+    params:
+      configs/params.yaml:
+        preprocessing.ratings:
+          min: 0.5
+          max: 5.0
+          step: 0.5
+    outs:
+    - path: data/interim/ratings.parquet
+      hash: md5
+      md5: 5c78bb5315b13acf098fbfc2c72d2609
+      size: 833239
+  align:
+    cmd: python -m src.alignment.align
+    deps:
+    - path: data/interim/catalog.parquet
+      hash: md5
+      md5: 3bee59a84f19ead12af6817beba2f675
+      size: 593658
+    - path: data/interim/external
+      hash: md5
+      md5: 7b15139e1f1e65ea46b30239e6d282f6.dir
+      size: 7547
+      nfiles: 2
+    - path: data/interim/images.parquet
+      hash: md5
+      md5: ca0f4a370b9b60940c83570fec6c81c5
+      size: 858473
+    - path: data/interim/meta.parquet
+      hash: md5
+      md5: 948d9945c5b2c0a931897215d3fbeb8a
+      size: 433575
+    - path: data/interim/text.parquet
+      hash: md5
+      md5: 50e00d6b7e9124984e76f478ec725fc2
+      size: 2378173
+    - path: src/alignment
+      hash: md5
+      md5: 5d9220c1cf0428f44b4a696502e8ffdc.dir
+      size: 8843
+      nfiles: 2
+    params:
+      configs/params.yaml:
+        preprocessing.meta.top_languages: 15
+        preprocessing.text.min_len_chars: 20
+    outs:
+    - path: data/interim/movies_aligned.parquet
+      hash: md5
+      md5: 1c6d447e8014035559b56843307e8ce7
+      size: 4143533
+  split:
+    cmd: python -m src.splitting.split
+    deps:
+    - path: configs/split_spec.json
+      hash: md5
+      md5: ebde89d3f4e89fd9dfa65280e0316bd9
+      size: 2335
+    - path: data/interim/movies_aligned.parquet
+      hash: md5
+      md5: 1c6d447e8014035559b56843307e8ce7
+      size: 4143533
+    - path: data/interim/ratings.parquet
+      hash: md5
+      md5: 5c78bb5315b13acf098fbfc2c72d2609
+      size: 833239
+    - path: src/splitting
+      hash: md5
+      md5: 1b2666464856cefb947b3264b07cb96a.dir
+      size: 9906
+      nfiles: 3
+    params:
+      configs/params.yaml:
+        project.seed: 42
+        split:
+          mode: frozen
+          frozen_spec: configs/split_spec.json
+          train_frac: 0.8
+          val_frac: 0.1
+          cold_item_frac: 0.05
+          cold_item_min_ratings: 5
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 25bcccf007dabd0cf79ecaf7a8b6496a.dir
+      size: 5000688
+      nfiles: 3
+  validate_processed:
+    cmd: python -m src.validation.processed
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 25bcccf007dabd0cf79ecaf7a8b6496a.dir
+      size: 5000688
+      nfiles: 3
+    - path: src/validation
+      hash: md5
+      md5: 29719aed27cc58e5533d82efa04e8953.dir
+      size: 34621
+      nfiles: 6
+    params:
+      configs/params.yaml:
+        preprocessing:
+          text:
+            min_len_chars: 20
+            max_len_chars: 5000
+            unicode_form: NFC
+          image:
+            min_side: 16
+            verify_decode: sample
+            verify_sample: 300
+          meta:
+            top_languages: 15
+            runtime_min: 1
+            runtime_max: 600
+          ratings:
+            min: 0.5
+            max: 5.0
+            step: 0.5
+        split:
+          mode: frozen
+          frozen_spec: configs/split_spec.json
+          train_frac: 0.8
+          val_frac: 0.1
+          cold_item_frac: 0.05
+          cold_item_min_ratings: 5
+        validation.processed:
+          max_missing:
+            overview: 0.02
+            poster_file: 0.02
+            release_year: 0.01
+            runtime_min: 0.02
+            original_language: 0.0
+          min_all_modalities_rate: 0.95
+          max_duplicate_rate: 0.0
+          max_outlier_rate: 0.005
+          year_min: 1874
+          year_max_offset: 2
+          poster_expected_width: 342
+          poster_aspect_range:
+          - 1.2
+          - 1.8
+          text_max_control_char_rate: 0.0
+          max_release_after_first_rating_rate: 0.01
+          min_genre_agreement: 0.5
+    outs:
+    - path: reports/validation/processed.json
+      hash: md5
+      md5: 9a9b6babc6a47b77d48b00f7b8d08214
+      size: 46444
+  extract_features:
+    cmd: python -m src.features.extract
+    deps:
+    - path: data/interim/external
+      hash: md5
+      md5: 7b15139e1f1e65ea46b30239e6d282f6.dir
+      size: 7547
+      nfiles: 2
+    - path: data/processed
+      hash: md5
+      md5: 25bcccf007dabd0cf79ecaf7a8b6496a.dir
+      size: 5000688
+      nfiles: 3
+    - path: data/raw/posters
+      hash: md5
+      md5: 4e1dd323b18ca9fe6326595a646561a3.dir
+      size: 500549070
+      nfiles: 9647
+    - path: reports/validation/processed.json
+      hash: md5
+      md5: 9a9b6babc6a47b77d48b00f7b8d08214
+      size: 46444
+    - path: src/features
+      hash: md5
+      md5: 6a5b8c9c752f71f8cae9e7acde6c7b3e.dir
+      size: 7596
+      nfiles: 2
+    params:
+      configs/params.yaml:
+        features:
+          backend: light
+          text_dim: 384
+          image_thumb: 16
+          batch_size: 64
+          pretrained:
+            image_model: resnet50
+            text_model: sentence-transformers/all-MiniLM-L6-v2
+    outs:
+    - path: data/features
+      hash: md5
+      md5: 40f9490c760eab8a4a44b260cceb57f9.dir
+      size: 15008319
+      nfiles: 2
+  report:
+    cmd: python -m src.reporting.report
+    deps:
+    - path: data/features/features.json
+      hash: md5
+      md5: da9d0ca3781c52c766a696d4102e7cc7
+      size: 993
+    - path: data/processed
+      hash: md5
+      md5: 25bcccf007dabd0cf79ecaf7a8b6496a.dir
+      size: 5000688
+      nfiles: 3
+    - path: reports/validation/external.json
+      hash: md5
+      md5: 62325a7042841a8ca4b17898047b7b97
+      size: 198
+    - path: reports/validation/processed.json
+      hash: md5
+      md5: 9a9b6babc6a47b77d48b00f7b8d08214
+      size: 46444
+    - path: reports/validation/raw.json
+      hash: md5
+      md5: db5dda1c676091fcd41e86cea588eb9e
+      size: 12957
+    - path: src/reporting
+      hash: md5
+      md5: ccdeb04032e5e0d7cf35cd7ff4fd5ed6.dir
+      size: 30209
+      nfiles: 4
+    params:
+      configs/params.yaml:
+        drift:
+          reference: reports/reference_profile.json
+          psi_warn: 0.1
+          psi_alert: 0.25
+          coverage_alert: 0.02
+          fail_on_alert: false
+    outs:
+    - path: reports/data_card.md
+      hash: md5
+      md5: 6be9c428c5c0c24ba0046276cbad02cd
+      size: 4346
+    - path: reports/drift.json
+      hash: md5
+      md5: ecf7040b01a60e9b95eb16958e7aa853
+      size: 2440
+    - path: reports/profile.json
+      hash: md5
+      md5: d4da945f5aa77a322dd2153314c63287
+      size: 6082
+    - path: reports/quality_report.html
+      hash: md5
+      md5: bab9af1f14428bbb614b58e729495564
+      size: 59858
+    - path: reports/quality_report.json
+      hash: md5
+      md5: dea9a7d3aee9f1cd8fd7ecc3627703a9
+      size: 3264
+    - path: reports/quality_report.md
+      hash: md5
+      md5: 3e19d8784b78b2fa26bd6f30f9b2e09a
+      size: 1056
+  ingest_external:
+    cmd: python -m src.ingestion.external
+    deps:
+    - path: data/raw/ml-latest-small/movies.csv
+      hash: md5
+      md5: ed94fab72b62442ef8150d9446e000d6
+      size: 494431
+    - path: data/raw/ml-latest-small/ratings.csv
+      hash: md5
+      md5: 325a6f09399d1c45671f187505e1a100
+      size: 2483723
+    - path: inbox
+      hash: md5
+      md5: 7a6924c468fcce942a2cb2f73fc903a6.dir
+      size: 2404
+      nfiles: 1
+    - path: src/ingestion/external.py
+      hash: md5
+      md5: 80a3b29b246c221adf1a89ecba0651bc
+      size: 16255
+    params:
+      configs/params.yaml:
+        preprocessing:
+          text:
+            min_len_chars: 20
+            max_len_chars: 5000
+            unicode_form: NFC
+          image:
+            min_side: 16
+            verify_decode: sample
+            verify_sample: 300
+          meta:
+            top_languages: 15
+            runtime_min: 1
+            runtime_max: 600
+          ratings:
+            min: 0.5
+            max: 5.0
+            step: 0.5
+        validation.processed.year_max_offset: 2
+        validation.processed.year_min: 1874
+    outs:
+    - path: data/interim/external
+      hash: md5
+      md5: 7b15139e1f1e65ea46b30239e6d282f6.dir
+      size: 7547
+      nfiles: 2
+    - path: reports/validation/external.json
+      hash: md5
+      md5: 62325a7042841a8ca4b17898047b7b97
+      size: 198

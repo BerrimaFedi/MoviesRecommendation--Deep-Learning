@@ -1,0 +1,564 @@
+{
+  "summary": {
+    "suite": "raw",
+    "n_checks": 45,
+    "n_passed": 45,
+    "n_errors": 0,
+    "n_warnings": 0,
+    "by_category": {
+      "schema": {
+        "passed": 33,
+        "failed": 0
+      },
+      "duplicates": {
+        "passed": 3,
+        "failed": 0
+      },
+      "source": {
+        "passed": 4,
+        "failed": 0
+      },
+      "inter_modal": {
+        "passed": 3,
+        "failed": 0
+      },
+      "missing": {
+        "passed": 2,
+        "failed": 0
+      }
+    },
+    "status": "passed"
+  },
+  "checks": [
+    {
+      "name": "movielens.movies: colonnes attendues présentes",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "toutes",
+      "threshold": [
+        "movieId",
+        "title",
+        "genres"
+      ],
+      "detail": ""
+    },
+    {
+      "name": "movielens.movies.movieId: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int32",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movielens.movies.movieId: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.movies.movieId ≥ 1",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.movies.movieId: unique",
+      "category": "duplicates",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.movies.title: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movielens.movies.title: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.movies.genres: type str",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "str",
+      "threshold": "str",
+      "detail": ""
+    },
+    {
+      "name": "movielens.movies.genres: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.links: colonnes attendues présentes",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "toutes",
+      "threshold": [
+        "movieId",
+        "imdbId",
+        "tmdbId"
+      ],
+      "detail": ""
+    },
+    {
+      "name": "movielens.links.movieId: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int32",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movielens.links.movieId: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.links.movieId ≥ 1",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.links.movieId: unique",
+      "category": "duplicates",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9742
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.links.imdbId: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "Int64",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movielens.links.tmdbId: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "Int64",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings: colonnes attendues présentes",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "toutes",
+      "threshold": [
+        "userId",
+        "movieId",
+        "rating",
+        "timestamp"
+      ],
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.userId: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int32",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.userId: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.userId ≥ 1",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.movieId: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int32",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.movieId: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.movieId ≥ 1",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.rating: type float",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "float32",
+      "threshold": "float",
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.rating: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.rating ≥ 0.5",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.rating ≤ 5.0",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.timestamp: type int",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "int64",
+      "threshold": "int",
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.timestamp: non nul",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens.ratings.timestamp ≥ 789652009",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens: volume minimal de films",
+      "category": "source",
+      "severity": "error",
+      "passed": true,
+      "observed": 9742,
+      "threshold": 50,
+      "detail": ""
+    },
+    {
+      "name": "movielens: volume minimal de notes",
+      "category": "source",
+      "severity": "error",
+      "passed": true,
+      "observed": 100836,
+      "threshold": 500,
+      "detail": ""
+    },
+    {
+      "name": "movielens: notes sur un film absent de movies.csv",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "movielens: links couvre tous les films",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": 0,
+      "threshold": 0,
+      "detail": ""
+    },
+    {
+      "name": "movielens: films sans tmdbId",
+      "category": "missing",
+      "severity": "warn",
+      "passed": true,
+      "observed": {
+        "rate": 0.000821,
+        "count": 8,
+        "total": 9742
+      },
+      "threshold": 0.01,
+      "detail": ""
+    },
+    {
+      "name": "movielens: doublons (userId, movieId)",
+      "category": "duplicates",
+      "severity": "warn",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 100836
+      },
+      "threshold": 0.0,
+      "detail": "corrigé au prétraitement (la note la plus récente est gardée)"
+    },
+    {
+      "name": "tmdb: cache présent et non vide",
+      "category": "source",
+      "severity": "error",
+      "passed": true,
+      "observed": 9733,
+      "threshold": "> 0",
+      "detail": ""
+    },
+    {
+      "name": "tmdb: lignes JSONL illisibles",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9733
+      },
+      "threshold": 0.001,
+      "detail": ""
+    },
+    {
+      "name": "tmdb: statut ∈ {200, 404}",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9733
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "tmdb: champs attendus présents",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9620
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "tmdb: tmdbId du catalogue non encore collectés",
+      "category": "missing",
+      "severity": "warn",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9733
+      },
+      "threshold": 0.01,
+      "detail": ""
+    },
+    {
+      "name": "affiches: fichier présent pour chaque entrée ok",
+      "category": "inter_modal",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 9646
+      },
+      "threshold": 0.0,
+      "detail": ""
+    },
+    {
+      "name": "affiches: JPEG décodable, RGB, côté ≥ min_side",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": {
+        "rate": 0.0,
+        "count": 0,
+        "total": 300
+      },
+      "threshold": 0.0,
+      "detail": "exemples : []"
+    },
+    {
+      "name": "affiches: manifeste limité au catalogue",
+      "category": "source",
+      "severity": "warn",
+      "passed": true,
+      "observed": 0,
+      "threshold": 0,
+      "detail": "entrées héritées de la Tâche 2 (secours Kaggle non filtré) : ignorées en aval"
+    },
+    {
+      "name": "kaggle: colonnes attendues",
+      "category": "schema",
+      "severity": "error",
+      "passed": true,
+      "observed": "toutes",
+      "threshold": [
+        "id",
+        "overview",
+        "genres",
+        "runtime",
+        "original_language",
+        "release_date",
+        "poster_path"
+      ],
+      "detail": ""
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+[project]
+name = "movies-multimodal"
+version = "0.3.0"
+description = "Projet 10 — pipeline DataOps et fusion multimodale pour la recommandation de films"
+requires-python = ">=3.13"
+
+[tool.ruff]
+line-length = 130
+target-version = "py313"
+extend-exclude = ["data", "data_sample", "mlruns", ".dvc"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "BLE"]
+ignore = ["B008", "UP037", "B905"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff.lint.per-file-ignores]
+# gabarits HTML / Markdown : lignes longues volontaires
+"src/reporting/report.py" = ["E501"]
+"src/reporting/datacard.py" = ["E501"]

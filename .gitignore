@@ -1,7 +1,15 @@
-# Données lourdes et images (MovieLens, TMDB posters, Kaggle)
+# Données : versionnées par DVC (dvc.lock + remote), jamais par Git
 data/
+data_sample/
+reports_sample/
 *.zip
 *.tar.gz
+
+# Journaux d'exécution, suivi d'expériences, modèles
+logs/
+mlruns/
+models/
+reports/drift_adhoc.json
 
 # Environnement virtuel et caches Python
 .venv/
@@ -9,6 +17,7 @@ __pycache__/
 *.pyc
 *.pyo
 .pytest_cache/
+.ruff_cache/
 
 # Identifiants et secrets sensibles
 .env
@@ -17,3 +26,7 @@ __pycache__/
 # Configuration éditeur
 .vscode/
 .idea/
+
+# Inbox : seul le README est versionné ; les données déposées passent par DVC (interim/external)
+inbox/*
+!inbox/README.md

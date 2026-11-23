@@ -1,0 +1,286 @@
+<h2 id="b1">3. État de l'art de la fusion multimodale</h2>
+
+<p>La fusion multimodale désigne l'ensemble des procédés qui combinent des informations issues de modalités
+hétérogènes (image, texte, données tabulaires, signal…) pour produire une prédiction unique. La taxonomie de
+Baltrušaitis et al. [1] distingue cinq défis du multimodal — représentation, traduction, alignement, fusion et
+co-apprentissage — et classe les méthodes de fusion selon le <em>moment</em> où les modalités sont combinées et
+selon le <em>mécanisme</em> de combinaison. Nous reprenons ces deux axes, puis les difficultés transverses, avant
+de résumer l'ensemble dans un tableau comparatif et de situer ces approches dans le cadre de la recommandation.</p>
+
+<h3 id="b1-niveaux">3.1 Les trois niveaux de fusion</h3>
+
+<p><strong>Fusion précoce (niveau données ou caractéristiques).</strong> Les représentations de chaque modalité
+(pixels, descripteurs extraits, vecteurs de mots, colonnes numériques) sont combinées, le plus souvent par
+concaténation, <em>avant</em> l'apprentissage du modèle principal : <code>x = [x<sub>1</sub>; x<sub>2</sub>; …;
+x<sub>M</sub>]</code>, puis <code>ŷ = f(x)</code>. Un seul modèle voit toutes les modalités et peut, en principe,
+apprendre leurs corrélations de bas niveau. En contrepartie, l'espace d'entrée est grand et hétérogène (échelles,
+densités et dimensions très différentes), une normalisation soignée est indispensable, et l'absence d'une modalité
+laisse un « trou » dans le vecteur qu'il faut imputer.</p>
+
+<p><strong>Fusion tardive (niveau décision).</strong> Un modèle <code>f<sub>m</sub></code> est entraîné par modalité
+et seules ses sorties sont combinées : vote majoritaire (classification), moyenne éventuellement pondérée
+<code>ŷ = Σ<sub>m</sub> w<sub>m</sub> f<sub>m</sub>(x<sub>m</sub>)</code> avec <code>Σ w<sub>m</sub> = 1</code>, ou
+<em>empilement</em> (stacking), où un méta-modèle <code>g</code> apprend à combiner les prédictions,
+<code>ŷ = g(f<sub>1</sub>(x<sub>1</sub>), …, f<sub>M</sub>(x<sub>M</sub>))</code>, sur des prédictions hors
+échantillon pour éviter le sur-apprentissage. La fusion tardive est modulaire, robuste à l'absence d'une modalité
+(on renormalise les poids) et naturellement interprétable, mais elle ignore les interactions entre modalités : la
+décision combinée n'est qu'une agrégation de décisions indépendantes.</p>
+
+<p><strong>Fusion intermédiaire ou hybride (niveau représentations apprises).</strong> Chaque modalité dispose de son
+propre encodeur <code>E<sub>m</sub></code> (réseau convolutif pour l'image, transformeur pour le texte, perceptron
+multicouche pour les données tabulaires), qui produit une représentation latente <code>h<sub>m</sub></code> ; un
+module de fusion <code>F</code> combine ces représentations dans le réseau, et l'ensemble est entraîné de bout en
+bout : <code>ŷ = H(F(h<sub>1</sub>, …, h<sub>M</sub>))</code>. C'est l'approche dominante en apprentissage profond :
+elle profite d'encodeurs pré-entraînés adaptés à chaque modalité, laisse le gradient de la tâche façonner les
+représentations et permet de choisir finement le mécanisme d'interaction. Les variantes « hybrides » ajoutent des
+sorties ou des pertes par modalité (supervision profonde), combinant ainsi niveau représentation et niveau
+décision.</p>
+
+<h3 id="b1-mecanismes">3.2 Mécanismes de fusion</h3>
+
+<p>Dans la suite, <code>h<sub>m</sub> ∈ ℝ<sup>d<sub>m</sub></sup></code> désigne la représentation vectorielle de la
+modalité <code>m</code> et <code>M</code> le nombre de modalités.</p>
+
+<p><strong>Concaténation.</strong> <code>z = W[h<sub>1</sub>; …; h<sub>M</sub>] + b</code>, suivie d'un MLP. C'est la
+référence universelle : simple, peu coûteuse (<code>O(Σ d<sub>m</sub>)</code> en entrée), mais les interactions
+multiplicatives entre modalités ne sont apprises qu'indirectement par les couches non linéaires suivantes.</p>
+
+<p><strong>Somme et produit pondérés.</strong> Après projection dans un espace commun de dimension <code>d</code>,
+<code>z = Σ<sub>m</sub> α<sub>m</sub> W<sub>m</sub>h<sub>m</sub></code> (somme) ou <code>z = ⊙<sub>m</sub>
+W<sub>m</sub>h<sub>m</sub></code> (produit de Hadamard). La somme est additive et tolère bien l'absence d'une
+modalité (terme omis) ; le produit élément par élément modélise une interaction multiplicative de premier ordre à
+coût linéaire, mais une modalité nulle annule tout le vecteur. Les poids <code>α<sub>m</sub></code> peuvent être
+fixes, appris globalement ou produits par une attention sur les modalités.</p>
+
+<p><strong>Unité multimodale à porte (GMU).</strong> Arevalo et al. [4] proposent une porte apprise qui décide, par
+dimension et par échantillon, quelle modalité privilégier. Pour deux modalités (image <code>v</code>, texte
+<code>t</code>) :</p>
+<p class="eq"><code>h<sub>v</sub> = tanh(W<sub>v</sub>x<sub>v</sub>), &nbsp; h<sub>t</sub> = tanh(W<sub>t</sub>x<sub>t</sub>),
+&nbsp; z = σ(W<sub>z</sub>[x<sub>v</sub>; x<sub>t</sub>]), &nbsp; h = z ⊙ h<sub>v</sub> + (1 − z) ⊙ h<sub>t</sub></code></p>
+<p>Avec <code>M &gt; 2</code> modalités, la porte devient un softmax sur les modalités. Le coût reste linéaire, les
+valeurs de <code>z</code> fournissent une mesure directe de la contribution de chaque modalité, et la porte peut
+apprendre à ignorer une modalité peu informative ou manquante. Appliquée à la classification de genres de films à
+partir de l'affiche et du synopsis, la GMU surpasse la concaténation et la fusion tardive [4].</p>
+
+<p><strong>Modulation conditionnelle (FiLM).</strong> Perez et al. [5] conditionnent les activations
+<code>F</code> d'une modalité par une transformation affine prédite à partir d'une autre :
+<code>FiLM(F | x) = γ(x) ⊙ F + β(x)</code>, où <code>γ</code> et <code>β</code> sont de petits réseaux. La fusion est
+asymétrique (une modalité « pilote » l'autre), peu coûteuse et s'insère à n'importe quelle profondeur ; elle
+convient quand une modalité joue naturellement le rôle de contexte (question, métadonnées, requête).</p>
+
+<p><strong>Fusion tensorielle (TFN).</strong> Zadeh et al. [2] modélisent explicitement toutes les interactions
+unimodales, bimodales et trimodales par le produit extérieur des représentations augmentées d'une constante :</p>
+<p class="eq"><code>Z = [h<sub>1</sub>; 1] ⊗ [h<sub>2</sub>; 1] ⊗ [h<sub>3</sub>; 1] ∈ ℝ<sup>(d<sub>1</sub>+1)×(d<sub>2</sub>+1)×(d<sub>3</sub>+1)</sup></code></p>
+<p>Le « 1 » ajouté conserve les termes unimodaux et bimodaux dans le tenseur. L'expressivité est maximale, mais la
+dimension <code>∏<sub>m</sub>(d<sub>m</sub>+1)</code> croît exponentiellement avec <code>M</code> : pour trois
+vecteurs de dimension 128, le tenseur compte plus de 2,1 millions de composantes, et la couche qui suit autant de
+poids par neurone de sortie.</p>
+
+<p><strong>Fusion de faible rang (LMF).</strong> Liu et al. [3] évitent de construire le tenseur en factorisant le
+poids de la couche suivante en <code>r</code> facteurs propres à chaque modalité :</p>
+<p class="eq"><code>h = Σ<sub>i=1</sub><sup>r</sup> ⊙<sub>m=1</sub><sup>M</sup> (W<sub>m</sub><sup>(i)</sup>[h<sub>m</sub>; 1])</code></p>
+<p>Le résultat est équivalent à une TFN dont le tenseur de poids est de rang <code>r</code>, pour un coût
+<code>O(r · d · Σ<sub>m</sub> d<sub>m</sub>)</code>, linéaire en <code>M</code>, avec des performances comparables à
+TFN et un entraînement nettement plus rapide [3].</p>
+
+<p><strong>Pooling bilinéaire compact (MCB, MFB).</strong> Le pooling bilinéaire <code>z<sub>k</sub> =
+h<sub>1</sub><sup>⊤</sup>W<sub>k</sub>h<sub>2</sub></code> capture toutes les interactions de second ordre mais
+exige <code>d<sub>1</sub>·d<sub>2</sub></code> paramètres par sortie. MCB [11] approxime le produit extérieur par
+des projections <em>Count Sketch</em> combinées par convolution, calculée comme un produit dans le domaine de Fourier
+(<code>Ψ(h<sub>1</sub>) * Ψ(h<sub>2</sub>) = FFT<sup>−1</sup>(FFT(Ψ(h<sub>1</sub>)) ⊙ FFT(Ψ(h<sub>2</sub>)))</code>),
+mais nécessite une dimension de sortie élevée (16 000 dans l'article). MFB [12] factorise <code>W<sub>k</sub> =
+U<sub>k</sub>V<sub>k</sub><sup>⊤</sup></code> de rang <code>k</code> : <code>z = SumPool(U<sup>⊤</sup>h<sub>1</sub> ⊙
+V<sup>⊤</sup>h<sub>2</sub>, k)</code>, suivi d'une normalisation racine carrée signée puis L2, plus compacte et plus
+stable. Ces méthodes, nées en question-réponse visuelle, sont surtout bimodales.</p>
+
+<p><strong>Attention croisée et transformers multimodaux.</strong> Lorsque les modalités sont des séquences
+(régions d'image, jetons de texte, trames audio), l'attention croisée permet à chaque élément d'une modalité de
+s'aligner sur les éléments pertinents de l'autre :</p>
+<p class="eq"><code>CA(H<sub>A</sub>, H<sub>B</sub>) = softmax((H<sub>A</sub>W<sub>Q</sub>)(H<sub>B</sub>W<sub>K</sub>)<sup>⊤</sup> / √d) · H<sub>B</sub>W<sub>V</sub>, &nbsp; H<sub>A</sub> ∈ ℝ<sup>n×d</sup>, H<sub>B</sub> ∈ ℝ<sup>m×d</sup></code></p>
+<p>Le coût est <code>O(n·m·d)</code> par couche. MulT [6] empile des attentions croisées par paire de modalités et
+traite des séquences non alignées temporellement ; ViLBERT [13] (et LXMERT, de conception voisine) utilise deux
+flux de transformeurs reliés par des couches de co-attention, pré-entraînés sur de grands corpus image-texte ;
+MMBT [22] projette les caractéristiques d'image comme des jetons supplémentaires d'un BERT, ce qui revient à une
+fusion précoce au niveau des jetons suivie d'auto-attention conjointe. Ces modèles sont les plus expressifs pour les
+interactions fines, mais ils sont gourmands en données et en calcul, et leur intérêt suppose que l'information utile
+naisse d'une correspondance locale entre éléments des deux modalités.</p>
+
+<p><strong>Goulots d'attention (MBT).</strong> Nagrani et al. [7] restreignent l'échange inter-modal à un petit
+nombre <code>B</code> de jetons « goulots » partagés : chaque modalité fait de l'auto-attention sur ses propres
+jetons et sur les goulots, qui sont ensuite moyennés entre modalités ; la fusion n'intervient qu'à partir d'une
+couche donnée. Le coût de l'échange passe de <code>O((n+m)<sup>2</sup>)</code> à <code>O((n+B)<sup>2</sup> +
+(m+B)<sup>2</sup>)</code>, et la contrainte force chaque modalité à condenser l'information qu'elle partage, avec de
+meilleurs résultats que la fusion complète en audio-vidéo [7].</p>
+
+<p><strong>Alignement contrastif (CLIP).</strong> Radford et al. [8] entraînent deux encodeurs (image, texte) à
+projeter les paires associées au même endroit d'un espace commun, par une perte InfoNCE symétrique sur un lot de
+<code>N</code> paires, avec <code>s<sub>ij</sub> = cos(u<sub>i</sub>, v<sub>j</sub>) / τ</code> :</p>
+<p class="eq"><code>L = −(1/2N) Σ<sub>i</sub> [ log( e<sup>s<sub>ii</sub></sup> / Σ<sub>j</sub> e<sup>s<sub>ij</sub></sup> ) + log( e<sup>s<sub>ii</sub></sup> / Σ<sub>j</sub> e<sup>s<sub>ji</sub></sup> ) ]</code></p>
+<p>CLIP n'est pas un module de fusion à proprement parler mais un mécanisme d'<em>alignement</em> : il produit des
+représentations directement comparables, utilisables en zéro-shot, comme encodeurs figés, ou comme perte
+auxiliaire qui rapproche les modalités d'un même objet. Son efficacité repose sur de très grands lots et corpus
+(400 millions de paires) ; à petite échelle, il est surtout utile sous forme de modèle pré-entraîné ou de
+régularisation.</p>
+
+<p><strong>Fusion par graphes.</strong> Les entités et leurs modalités sont des nœuds d'un graphe, et la fusion
+s'opère par passage de messages (GCN, GAT). En recommandation, MMGCN [14] construit un graphe biparti
+utilisateur-item par modalité, propage l'information dans chacun puis agrège les représentations obtenues. Cette
+approche exploite la structure relationnelle (co-consommation, similarités), au prix d'un coût qui dépend de la
+taille du graphe et d'une difficulté pour les nœuds isolés : un item nouveau, sans arête, ne bénéficie pas de la
+propagation.</p>
+
+<h3 id="b1-difficultes">3.3 Difficultés propres au multimodal</h3>
+
+<p><strong>Hétérogénéité des représentations.</strong> Les modalités diffèrent par leur structure (grille de pixels,
+séquence de jetons, vecteur tabulaire mixte), leur dimension, leur échelle et leur niveau sémantique. Il faut donc
+des encodeurs spécifiques — par exemple ResNet [20] pour l'image, Sentence-BERT [19] pour le texte — et des
+projections vers un espace commun avec normalisation (LayerNorm) avant toute combinaison, sous peine qu'une
+modalité de grande norme domine mécaniquement.</p>
+
+<p><strong>Alignement temporel ou sémantique.</strong> Dans la vidéo ou la parole, les modalités doivent être
+synchronisées ; MulT [6] traite le cas non aligné par attention croisée. Lorsque les modalités sont appariées
+échantillon par échantillon (une affiche et un synopsis par film), l'alignement est donné par la clé de jointure,
+et la question devient sémantique : les deux modalités décrivent-elles la même chose et à quel point sont-elles
+redondantes ? Les pertes contrastives [8] répondent à ce besoin.</p>
+
+<p><strong>Modalités manquantes à l'inférence.</strong> Un modèle entraîné sur des données complètes se dégrade
+souvent fortement quand une modalité manque ; Ma et al. [21] le montrent pour les transformers multimodaux, dont la
+robustesse dépend fortement de la stratégie de fusion. Les remèdes classiques sont le <em>modality dropout</em>
+(suppression aléatoire d'une modalité à l'entraînement), le remplacement de la représentation absente par un jeton
+appris accompagné d'un masque explicite, et les mécanismes de porte qui reportent le poids sur les modalités
+présentes. En recommandation, DropoutNet [16] applique ce principe au démarrage à froid : en masquant aléatoirement
+la représentation collaborative (préférences apprises) pendant l'entraînement, il force le modèle à prédire à
+partir du seul contenu, ce qui est exactement la situation d'un item nouveau.</p>
+
+<p><strong>Déséquilibre entre modalités.</strong> En entraînement conjoint, la modalité la plus facile à exploiter
+converge plus vite et capte l'essentiel du gradient, laissant les autres sous-entraînées : le modèle multimodal
+peut alors faire moins bien que le meilleur modèle unimodal. Wang et al. [17] attribuent ce phénomène au
+sur-apprentissage différencié des branches et proposent le <em>gradient blending</em>, qui pondère des pertes par
+modalité selon leur rapport généralisation/sur-apprentissage. Peng et al. [18] (OGM-GE) modulent dynamiquement le
+gradient de chaque encodeur en fonction de sa contribution relative et ajoutent un bruit gaussien pour préserver la
+généralisation. Des pertes auxiliaires unimodales et le modality dropout constituent des alternatives plus
+simples.</p>
+
+<p><strong>Coût de calcul.</strong> Il est déterminé par les encodeurs (affiner un ViT ou un BERT coûte bien plus que
+le module de fusion) et par la complexité de la fusion : linéaire pour la concaténation, la somme, la GMU, FiLM et
+LMF ; exponentielle en <code>M</code> pour TFN ; quadratique en longueur de séquence pour l'attention. Avec un
+matériel limité, figer les encodeurs pré-entraînés et mettre en cache leurs représentations ramène l'entraînement à
+celui d'un petit réseau.</p>
+
+<p><strong>Interprétabilité.</strong> Mesurer la contribution de chaque modalité est souvent exigé. La fusion tardive
+l'offre par construction (poids <code>w<sub>m</sub></code>) ; la GMU par les valeurs de porte ; l'attention par ses
+cartes, dont l'interprétation reste discutée. Les études d'ablation (retrait ou permutation d'une modalité à
+l'évaluation) restent l'outil le plus fiable, quel que soit le mécanisme.</p>
+
+<h3 id="b1-tableau">3.4 Tableau comparatif</h3>
+
+<table class="compare">
+  <thead>
+    <tr><th>Approche</th><th>Principe</th><th>Avantages</th><th>Limites</th><th>Conditions d'usage / réf.</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Fusion précoce</td>
+      <td>Concaténer entrées ou descripteurs, un seul modèle.</td>
+      <td>Simple ; un modèle voit tout ; corrélations de bas niveau.</td>
+      <td>Entrée grande et hétérogène ; imputation des absences ; sensible aux échelles.</td>
+      <td>Modalités déjà vectorielles et peu nombreuses [1].</td></tr>
+    <tr><td>Fusion tardive</td>
+      <td>Un modèle par modalité ; vote, moyenne pondérée ou stacking.</td>
+      <td>Modulaire ; robuste aux absences ; poids interprétables.</td>
+      <td>Ignore les interactions inter-modales.</td>
+      <td>Modalités suffisantes séparément ; baseline [1].</td></tr>
+    <tr><td>Intermédiaire — concaténation</td>
+      <td>Encodeurs par modalité, concaténation des latents, MLP, bout en bout.</td>
+      <td>Référence robuste ; coût linéaire.</td>
+      <td>Interactions seulement implicites ; une modalité peut dominer.</td>
+      <td>Baseline de toute fusion apprise [1].</td></tr>
+    <tr><td>Intermédiaire — somme / produit pondérés</td>
+      <td>Projection commune puis Σ α<sub>m</sub>h<sub>m</sub> ou ⊙<sub>m</sub>h<sub>m</sub>.</td>
+      <td>Très léger ; somme tolérante aux absences.</td>
+      <td>Peu expressif ; le produit s'annule si une modalité manque.</td>
+      <td>Modalités redondantes, même espace [1].</td></tr>
+    <tr><td>GMU</td>
+      <td>Porte σ apprise par dimension : z⊙h<sub>v</sub> + (1−z)⊙h<sub>t</sub>.</td>
+      <td>Pondération par échantillon ; contribution lisible ; coût linéaire.</td>
+      <td>Interactions seulement additives modulées.</td>
+      <td>Vecteurs appariés, qualité variable par modalité [4].</td></tr>
+    <tr><td>FiLM</td>
+      <td>γ(x)⊙F + β(x) : une modalité module l'autre.</td>
+      <td>Léger ; insérable à toute profondeur.</td>
+      <td>Asymétrique ; choix de la modalité pilote.</td>
+      <td>Une modalité sert de contexte [5].</td></tr>
+    <tr><td>TFN</td>
+      <td>Produit extérieur des [h<sub>m</sub>; 1].</td>
+      <td>Toutes les interactions uni-, bi-, trimodales explicites.</td>
+      <td>Dimension ∏(d<sub>m</sub>+1) ; sur-apprentissage.</td>
+      <td>Petits latents, peu de modalités [2].</td></tr>
+    <tr><td>LMF</td>
+      <td>TFN à poids factorisé de rang r par modalité.</td>
+      <td>Expressivité proche de TFN ; coût linéaire en M.</td>
+      <td>Rang r à régler ; moins lisible.</td>
+      <td>Alternative efficace à TFN [3].</td></tr>
+    <tr><td>MCB / MFB</td>
+      <td>Pooling bilinéaire approché (Count Sketch + FFT) ou factorisé.</td>
+      <td>Interactions de second ordre à coût réduit.</td>
+      <td>Surtout bimodal ; grande dimension (MCB).</td>
+      <td>VQA, deux modalités riches [11], [12].</td></tr>
+    <tr><td>Attention croisée / transformer multimodal</td>
+      <td>Requêtes d'une modalité sur les jetons de l'autre ; co-attention.</td>
+      <td>Interactions fines ; gère le non-alignement.</td>
+      <td>O(n·m) ; beaucoup de données ; pré-entraînement lourd.</td>
+      <td>Séquences, grands corpus [6], [13], [22].</td></tr>
+    <tr><td>Goulots d'attention (MBT)</td>
+      <td>Échange via B jetons partagés à partir d'une couche donnée.</td>
+      <td>Coût réduit ; force la condensation.</td>
+      <td>Architecture transformer complète requise.</td>
+      <td>Audio-vidéo, longues séquences [7].</td></tr>
+    <tr><td>Alignement contrastif (CLIP)</td>
+      <td>InfoNCE symétrique sur paires appariées.</td>
+      <td>Espace commun ; zéro-shot ; bons encodeurs pré-entraînés.</td>
+      <td>Alignement, pas fusion ; très grands lots et corpus.</td>
+      <td>Encodeurs figés ou perte auxiliaire [8].</td></tr>
+    <tr><td>Fusion par graphes</td>
+      <td>Passage de messages sur un graphe d'entités et modalités.</td>
+      <td>Exploite les relations (co-consommation).</td>
+      <td>Coût lié au graphe ; nœuds isolés mal servis.</td>
+      <td>Recommandation à interactions denses [14].</td></tr>
+  </tbody>
+</table>
+
+<h3 id="b1-recsys">3.5 Fusion en recommandation multimodale</h3>
+
+<p>En recommandation, la fusion sert d'abord à construire la représentation d'un item à partir de son contenu.
+L'architecture de référence est le modèle à deux tours : une tour utilisateur et une tour item, dont le produit
+scalaire ou un petit réseau prédit l'affinité ; la tour item est alors un encodeur multimodal dont le module de
+fusion est l'un des mécanismes ci-dessus. VBPR [15] a montré l'intérêt d'ajouter à la factorisation matricielle une
+composante visuelle issue d'un CNN pré-entraîné, projetée dans l'espace latent et apprise par perte BPR ; MMGCN [14]
+étend l'idée à plusieurs modalités par propagation sur graphe. Pour le démarrage à froid strict — des films jamais
+vus à l'entraînement, cas central de notre projet, qui combine affiche, synopsis et métadonnées tabulaires issus de
+MovieLens et TMDB —, les approches à graphe et les plongements d'identifiants ne s'appliquent pas aux nouveaux items :
+seule la représentation de contenu est disponible. DropoutNet [16] répond à ce cas en entraînant le modèle à se
+passer de la composante collaborative, ce qui revient à traiter l'identifiant comme une modalité supplémentaire,
+manquante pour les items froids. Ces constats orientent le choix argumenté présenté à la section suivante.</p>
+
+<h3 id="refs-b1">Références citées dans cette section</h3>
+<ol>
+  <li value="1">T. Baltrušaitis, C. Ahuja, L.-P. Morency, « Multimodal Machine Learning: A Survey and Taxonomy », <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>, 41(2), 2019.</li>
+  <li value="2">A. Zadeh, M. Chen, S. Poria, E. Cambria, L.-P. Morency, « Tensor Fusion Network for Multimodal Sentiment Analysis », <em>EMNLP</em>, 2017.</li>
+  <li value="3">Z. Liu, Y. Shen, V. B. Lakshminarasimhan, P. P. Liang, A. Zadeh, L.-P. Morency, « Efficient Low-rank Multimodal Fusion with Modality-Specific Factors », <em>ACL</em>, 2018.</li>
+  <li value="4">J. Arevalo, T. Solorio, M. Montes-y-Gómez, F. A. González, « Gated Multimodal Units for Information Fusion », <em>ICLR Workshop</em>, 2017.</li>
+  <li value="5">E. Perez, F. Strub, H. de Vries, V. Dumoulin, A. Courville, « FiLM: Visual Reasoning with a General Conditioning Layer », <em>AAAI</em>, 2018.</li>
+  <li value="6">Y.-H. H. Tsai, S. Bai, P. P. Liang, J. Z. Kolter, L.-P. Morency, R. Salakhutdinov, « Multimodal Transformer for Unaligned Multimodal Language Sequences », <em>ACL</em>, 2019.</li>
+  <li value="7">A. Nagrani, S. Yang, A. Arnab, A. Jansen, C. Schmid, C. Sun, « Attention Bottlenecks for Multimodal Fusion », <em>NeurIPS</em>, 2021.</li>
+  <li value="8">A. Radford et al., « Learning Transferable Visual Models From Natural Language Supervision », <em>ICML</em>, 2021.</li>
+  <li value="11">A. Fukui, D. H. Park, D. Yang, A. Rohrbach, T. Darrell, M. Rohrbach, « Multimodal Compact Bilinear Pooling for Visual Question Answering and Visual Grounding », <em>EMNLP</em>, 2016.</li>
+  <li value="12">Z. Yu, J. Yu, J. Fan, D. Tao, « Multi-modal Factorized Bilinear Pooling with Co-Attention Learning for Visual Question Answering », <em>ICCV</em>, 2017.</li>
+  <li value="13">J. Lu, D. Batra, D. Parikh, S. Lee, « ViLBERT: Pretraining Task-Agnostic Visiolinguistic Representations for Vision-and-Language Tasks », <em>NeurIPS</em>, 2019.</li>
+  <li value="14">Y. Wei, X. Wang, L. Nie, X. He, R. Hong, T.-S. Chua, « MMGCN: Multi-modal Graph Convolution Network for Personalized Recommendation of Micro-video », <em>ACM Multimedia</em>, 2019.</li>
+  <li value="15">R. He, J. McAuley, « VBPR: Visual Bayesian Personalized Ranking from Implicit Feedback », <em>AAAI</em>, 2016.</li>
+  <li value="16">M. Volkovs, G. Yu, T. Poutanen, « DropoutNet: Addressing Cold Start in Recommender Systems », <em>NeurIPS</em>, 2017.</li>
+  <li value="17">W. Wang, D. Tran, M. Feiszli, « What Makes Training Multi-modal Classification Networks Hard? », <em>CVPR</em>, 2020.</li>
+  <li value="18">X. Peng, Y. Wei, A. Deng, D. Wang, D. Hu, « Balanced Multimodal Learning via On-the-fly Gradient Modulation », <em>CVPR</em>, 2022.</li>
+  <li value="19">N. Reimers, I. Gurevych, « Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks », <em>EMNLP-IJCNLP</em>, 2019.</li>
+  <li value="20">K. He, X. Zhang, S. Ren, J. Sun, « Deep Residual Learning for Image Recognition », <em>CVPR</em>, 2016.</li>
+  <li value="21">M. Ma, J. Ren, L. Zhao, D. Testuggine, X. Peng, « Are Multimodal Transformers Robust to Missing Modality? », <em>CVPR</em>, 2022.</li>
+  <li value="22">D. Kiela, S. Bhooshan, H. Firooz, E. Perez, D. Testuggine, « Supervised Multimodal Bitransformers for Classifying Images and Text », arXiv:1909.02950, 2019.</li>
+</ol>
